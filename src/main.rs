@@ -1,4 +1,7 @@
+mod water_board;
+
 fn main()
 {
-    println!("Hello, world!");
+    let my_board = crate::water_board::WaterBoard::new_board();     
+    my_board.print_board();
 }
