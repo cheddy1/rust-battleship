@@ -1,10 +1,19 @@
-// Import the water_board module
-use crate::water_board::*;
+use crate::battleship_game::BOARD_SIZE;
+use crate::battleship_game::data_structures::*;
 
-// This file will just implement the print_board function, I'm leaving this in a separate file
-// because in the end we won't need this file for the executable
-impl WaterBoard
+pub struct Player
 {
+    board_matrix: [[ WaterSquare; BOARD_SIZE ]; BOARD_SIZE ],
+}
+
+impl Player
+{
+    pub fn new_player() -> Player
+    {
+        // Create a new WaterBoard object where the matrix is iniaialized to all empty squares
+        Player { board_matrix: [[ WaterSquare::Empty; 8 ]; 8 ] }
+    }
+    
     pub fn print_board(&self)
     {
         print!("["); // Start the array in the print
@@ -47,4 +56,5 @@ impl WaterBoard
         // Print the closing bracket for the array
         print!(" ]\n");
     }
+
 }

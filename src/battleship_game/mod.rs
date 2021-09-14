@@ -1,8 +1,16 @@
+// Import the sub-modules
+mod data_structures;
+mod debug;
+mod player;
+mod ship;
+
 // Import the battleship_game module from the root of the crate
-use crate::water_board::*;
+use crate::battleship_game::player::*;
+
+const BOARD_SIZE: usize = 8;
 
 pub struct BattleShipGame
 {
-    player_one_board: WaterBoard,
-    player_two_board: WaterBoard,
+    player_one: Player, 
+    player_two: Player,
 }
