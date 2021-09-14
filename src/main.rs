@@ -1,4 +1,5 @@
 mod water_board;
+mod battleship_game;
 
 fn main()
 {
