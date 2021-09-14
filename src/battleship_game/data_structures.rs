@@ -13,3 +13,9 @@ pub enum ShipType
     Submarine,
     Destroyer,
 }
+
+pub enum Players
+{
+    PlayerOne,
+    PlayerTwo,
+}

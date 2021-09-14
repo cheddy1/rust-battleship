@@ -4,14 +4,19 @@ use crate::battleship_game::data_structures::*;
 pub struct Player
 {
     board_matrix: [[ WaterSquare; BOARD_SIZE ]; BOARD_SIZE ],
+    player_signature: Players, 
 }
 
 impl Player
 {
-    pub fn new_player() -> Player
+    pub fn new_player(player_sig: Players) -> Player
     {
         // Create a new WaterBoard object where the matrix is iniaialized to all empty squares
-        Player { board_matrix: [[ WaterSquare::Empty; 8 ]; 8 ] }
+        Player
+        {
+            board_matrix: [[ WaterSquare::Empty; 8 ]; 8 ],
+            player_signature: player_sig, 
+        }
     }
     
     pub fn print_board(&self)
