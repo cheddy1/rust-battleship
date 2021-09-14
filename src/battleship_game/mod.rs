@@ -18,12 +18,12 @@ pub struct BattleShipGame
 
 impl BattleShipGame
 {
-    pub fn init_game() -> BattleShipGame
+    pub fn init_game(ship_count: usize) -> BattleShipGame
     {
         BattleShipGame
         {
-            player_one: Player::new_player(Players::PlayerOne),
-            player_two: Player::new_player(Players::PlayerTwo),
+            player_one: Player::new_player(ship_count, Players::PlayerOne),
+            player_two: Player::new_player(ship_count, Players::PlayerTwo),
         }
     }
 

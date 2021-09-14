@@ -22,6 +22,11 @@ impl Player
             player_signature: player_sig, 
         }
     }
+
+    pub fn place_ship(&mut self, starting_point: (u8, u8), is_vertical: bool)
+    {
+        self.ships_vec.push(Ship::new_ship(self.ships_vec.len() + 1, starting_point, is_vertical));
+    }
 }
 
 impl Player
