@@ -31,4 +31,9 @@ impl BattleShipGame
     {
         self.player_one.print_board();
     }
+
+    pub fn print_p1_ships(&self)
+    {
+        self.player_one.print_ships();
+    }
 }

@@ -29,8 +29,17 @@ impl Player
     }
 }
 
+// Debug implementation for printing a player's board
 impl Player
 {
+    pub fn print_ships(&self)
+    {
+        for ship in self.ships_vec.iter()
+        {
+            ship.print_ship();
+        }
+    }
+
     pub fn print_board(&self)
     {
         print!("["); // Start the array in the print
