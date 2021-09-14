@@ -7,7 +7,8 @@ mod ship;
 use crate::battleship_game::player::*;
 use crate::battleship_game::data_structures::*;
 
-const BOARD_SIZE: usize = 8;
+const BOARD_WIDTH: usize = 10;
+const BOARD_HEIGHT: usize = 9;
 
 pub struct BattleShipGame
 {
@@ -24,5 +25,10 @@ impl BattleShipGame
             player_one: Player::new_player(Players::PlayerOne),
             player_two: Player::new_player(Players::PlayerTwo),
         }
+    }
+
+    pub fn print_p1_board(&self)
+    {
+        self.player_one.print_board();
     }
 }

@@ -1,32 +1,39 @@
-use crate::battleship_game::BOARD_SIZE;
+use crate::battleship_game::BOARD_WIDTH;
+use crate::battleship_game::BOARD_HEIGHT;
 use crate::battleship_game::data_structures::*;
+use crate::battleship_game::ship::*;
 
 pub struct Player
 {
-    board_matrix: [[ WaterSquare; BOARD_SIZE ]; BOARD_SIZE ],
+    board_matrix: [[ WaterSquare; BOARD_WIDTH ]; BOARD_HEIGHT ],
+    ships_vec: Vec<Ship>,
     player_signature: Players, 
 }
 
 impl Player
 {
-    pub fn new_player(player_sig: Players) -> Player
+    pub fn new_player(ship_count: usize, player_sig: Players) -> Player
     {
         // Create a new WaterBoard object where the matrix is iniaialized to all empty squares
         Player
         {
-            board_matrix: [[ WaterSquare::Empty; 8 ]; 8 ],
+            board_matrix: [[ WaterSquare::Empty; BOARD_WIDTH ]; BOARD_HEIGHT ],
+            ships_vec: Vec::new(),
             player_signature: player_sig, 
         }
     }
-    
+}
+
+impl Player
+{
     pub fn print_board(&self)
     {
         print!("["); // Start the array in the print
 
         // Iterate through the matrix to print it
-        for i in 0..BOARD_SIZE
+        for i in 0..BOARD_HEIGHT
         {
-            for j in 0..BOARD_SIZE
+            for j in 0..BOARD_WIDTH
             {
                 // Match statement to show if the square is either empty or has been hit
                 let to_print = match self.board_matrix[i][j]
@@ -44,7 +51,7 @@ impl Player
                 // Print the value
                 print!(" {}", to_print);
 
-                if i != (BOARD_SIZE - 1) || j != (BOARD_SIZE - 1)
+                if i != (BOARD_HEIGHT - 1) || j != (BOARD_WIDTH - 1)
                 {
                     // Add a comma if it's not the very last value
                     print!(", ");
@@ -52,7 +59,7 @@ impl Player
             }
 
             // Print a new line as long as it's not the last line
-            if i != (BOARD_SIZE - 1) 
+            if i != (BOARD_HEIGHT - 1) 
             {
                 print!("\n");
             }
@@ -61,5 +68,4 @@ impl Player
         // Print the closing bracket for the array
         print!(" ]\n");
     }
-
 }
