@@ -17,8 +17,13 @@ impl Player
         // Create a new WaterBoard object where the matrix is iniaialized to all empty squares
         Player
         {
+            // Matrix storing board positions
             board_matrix: [[ WaterSquare::Empty; BOARD_WIDTH ]; BOARD_HEIGHT ],
+            
+            // New empty vector to be filled out later by using place_ship func
             ships_vec: Vec::new(),
+            
+            // The signature of the player, mostly for checking the player's turn
             player_signature: player_sig, 
         }
     }
@@ -26,6 +31,26 @@ impl Player
     pub fn place_ship(&mut self, starting_point: (u8, u8), is_vertical: bool)
     {
         self.ships_vec.push(Ship::new_ship(self.ships_vec.len() + 1, starting_point, is_vertical));
+    }
+
+    // Function for being hit on a board
+    pub fn fire(&mut self, pos: (u8, u8)) -> FireState
+    {
+       FireState::Miss 
+    }
+
+    // Function for returning if there's a ship at a particular location
+    pub fn shit_at(&self, pos: (u8, u8)) -> bool
+    {
+        for ship in self.ships_vec.iter()
+        {
+           if ship.get_ships().contains(&pos)
+           {
+               return true;
+           }
+        }
+
+        false
     }
 }
 

@@ -19,3 +19,9 @@ pub enum Players
     PlayerOne,
     PlayerTwo,
 }
+
+pub enum FireState
+{
+    Hit,
+    Miss,
+}

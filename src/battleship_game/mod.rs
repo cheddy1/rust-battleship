@@ -37,7 +37,7 @@ impl BattleShipGame
         //let mut p1_button_ary = [[Button::default(); 9]; 10];
         //let mut p2_button_ary = [[Button::default(); 9]; 10];
 
-
+        // TODO: Move to separate module
         for j in 0..BOARD_HEIGHT
         {
             for i in 0..BOARD_WIDTH

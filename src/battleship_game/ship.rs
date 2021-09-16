@@ -35,6 +35,11 @@ impl Ship
             is_sunk: false,  
         }
     } 
+
+    pub fn get_ships(&self) -> Vec<(u8, u8)>
+    {
+        self.ship_position
+    }
 }
 
 
