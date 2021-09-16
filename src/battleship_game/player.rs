@@ -22,10 +22,24 @@ impl Player
             player_signature: player_sig, 
         }
     }
+
+    pub fn place_ship(&mut self, starting_point: (u8, u8), is_vertical: bool)
+    {
+        self.ships_vec.push(Ship::new_ship(self.ships_vec.len() + 1, starting_point, is_vertical));
+    }
 }
 
+// Debug implementation for printing a player's board
 impl Player
 {
+    pub fn print_ships(&self)
+    {
+        for ship in self.ships_vec.iter()
+        {
+            ship.print_ship();
+        }
+    }
+
     pub fn print_board(&self)
     {
         print!("["); // Start the array in the print

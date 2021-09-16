@@ -27,7 +27,7 @@ pub struct BattleShipGame
 
 impl BattleShipGame
 {
-    pub fn init_game() -> BattleShipGame
+    pub fn init_game(ship_count: usize) -> BattleShipGame
     {
         // I dont know where to put this window creation logic, so it can live in init_game for now.
         let app = app::App::default();
@@ -79,13 +79,18 @@ impl BattleShipGame
 
         BattleShipGame
         {
-            player_one: Player::new_player(Players::PlayerOne),
-            player_two: Player::new_player(Players::PlayerTwo),
+            player_one: Player::new_player(ship_count, Players::PlayerOne),
+            player_two: Player::new_player(ship_count, Players::PlayerTwo),
         }
     }
 
     pub fn print_p1_board(&self)
     {
         self.player_one.print_board();
+    }
+
+    pub fn print_p1_ships(&self)
+    {
+        self.player_one.print_ships();
     }
 }
