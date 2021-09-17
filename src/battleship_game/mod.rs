@@ -166,6 +166,54 @@ impl BattleShipGame
             dummy_ship.set_frame(FrameType::OvalBox);
             dummy_ship.set_color(Color::from_u32(0xE9ECF0));
         }
+
+
+        // This is a concept of drawing a box to the screen. We can keep it for now as a backup.
+        // let mut screen_blocker1 = fltk::draw::draw_box(FrameType::FlatBox, 0, 0, 1750, 600, Color::from_u32(0x00000A));
+
+        // Button that covers the screen between turns.
+        let mut screen_blocker = Button::new(0, 0, 1750, 600, "Click here to start your turn.");
+
+        screen_blocker.set_frame(FrameType::FlatBox);
+        screen_blocker.set_color(Color::from_u32(0xC0C0C0));
+        screen_blocker.hide();
+
+        // Button that indicates a user is finished looking a the board after a turn.
+        let mut cont_btn = Button::new( 1600, 555, 100, 40, "Continue");
+
+        cont_btn.set_frame(FrameType::ThinUpBox);
+        cont_btn.set_color(Color::from_u32(0x4C9C48));
+        cont_btn.set_selection_color(Color::from_u32(0x397536));
+
+        // Hide the screen blocker when clicked.
+        screen_blocker.set_callback(move |btn| {
+            println!("Player 1");
+            btn.hide();
+        });
+
+        // Call back for the continue button that blocks the screen with screen_blocker.
+        cont_btn.set_callback(move |btn| {
+            println!("Player 1");
+            screen_blocker.show();
+            // btn.hide() // possibly hide or disable when the screen_blocker is shown?
+        });
+
+        
+        // Cool alert... we can delete once we know we dont need it.
+        // fltk::dialog::alert(
+        //     875, 
+        //     300, 
+        //     "Dissmiss to start your turn."
+        // );
+
+        // Dont know how to set a callback for this yet, or require valid input.
+        let mut ship_input = fltk::dialog::input(
+            875, 
+            300, 
+            "How many ships do you want to play with?",
+            ""
+        );
+
         wind.end();
         wind.show();
         app.run().unwrap();
