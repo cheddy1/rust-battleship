@@ -33,7 +33,7 @@ const NUM_OFFSET: i32 = 50;
 
 const P1_BOARD_LEFT_OFFSET: i32 = 0;
 const P2_BOARD_LEFT_OFFSET: i32 = 850;
-const BOARD_TOP_OFFSET: i32 = 100;
+const BOARD_TOP_OFFSET: i32 = 50;
 
 // We need to draw two boards on the screen. In order to avoid
 // repeating the same code to draw two boards, we group up all of the
