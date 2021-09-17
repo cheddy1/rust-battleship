@@ -8,6 +8,7 @@ pub struct Player
     board_matrix: [[ WaterSquare; BOARD_WIDTH ]; BOARD_HEIGHT ],
     ships_vec: Vec<Ship>,
     player_signature: Players, 
+    has_lost: bool,
 }
 
 impl Player
@@ -25,6 +26,9 @@ impl Player
             
             // The signature of the player, mostly for checking the player's turn
             player_signature: player_sig, 
+
+            //Player has not lost yet (hopefully)
+            has_lost: false,
         }
     }
 
@@ -53,6 +57,33 @@ impl Player
                 FireState::Hit
             }
             None => FireState::Miss
+        }
+
+    }
+
+    // Function to check if all ships are sunk
+    pub fn loss_check(&mut self)
+    {
+        // Whenever it finds a sunk ship, it sets has_lost to true
+        // Whenever it finds an unsunk ship, it sets has_lost to false
+        // and breaks the loop
+        for i in 0..self.ships_vec.len()
+        {
+            if self.ships_vec[i].sunk_check()
+            {
+                self.has_lost = true;
+            }
+            else
+            {
+                self.has_lost = false;
+                break;
+            }
+        }
+
+        // TODO: remove debug print
+        if self.has_lost
+        {
+            println!("git gud");
         }
     }
 
