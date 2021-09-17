@@ -154,7 +154,7 @@ impl BattleShipGame {
 
         wind.end();
         wind.show();
-        app.run().unwrap();
+        // app.run().unwrap();
 
         BattleShipGame {
             player_one: Player::new_player(ship_count, Players::PlayerOne),
