@@ -41,24 +41,32 @@ impl Player
         self.board_matrix[pos.1 as usize][pos.0 as usize] = WaterSquare::Hit;
 
         // We should then see if a ship has been hit
-        //if self.ship_at(pos)
-        //{
-            // If a ship has been hit, then we want to see if it's sunk, and then update that ship
-            // TODO: Finish
-        //}
+        return match self.ship_index_at(pos)
+        {
+            Some(i) =>
+            {
+                // If we hit some ship, we want to see if it's sunk
+                self.ships_vec.get_mut(i).unwrap().update_ship(&self.board_matrix);
+                //ship.update_ship(&self.board_matrix);
 
-        FireState::Hit
+                // Then return a hit
+                FireState::Hit
+            }
+            None => FireState::Miss
+        }
     }
 
     // Function for returning if there's a ship at a particular location
-    pub fn ship_at(&self, pos: (u8, u8)) -> Option<&Ship>
+    pub fn ship_index_at(&self, pos: (u8, u8)) -> Option<usize>
     {
-        for ship in self.ships_vec.iter()
+        // Enumerate gives us an interator with a two tuple, the first value is the index of
+        // iteration, the second value is the item in the vector at the current index
+        for (i, ship) in self.ships_vec.iter().enumerate()
         {
            if ship.get_ships().contains(&pos)
            {
                // If this spot has a ship in it, return the ship
-               return Some(ship);
+               return Some(i);
            }
         }
 
