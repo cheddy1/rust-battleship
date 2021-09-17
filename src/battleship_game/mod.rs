@@ -102,7 +102,10 @@ impl Board
                 temp_btn.set_selection_color(Color::from_u32(0x1a2b38));
 
                 // Custom function can replace println in future!
-                temp_btn.set_callback(move |_| println!("Player 1 {},{}", i, j));
+                temp_btn.set_callback(move |btn| {
+                    println!("Player 1 {},{}", i, j);
+                    btn.set_color(Color::from_u32(0x00000A));
+                });
             }
         }
 
@@ -151,27 +154,28 @@ impl BattleShipGame
         p1_ship_container.set_frame(FrameType::BorderBox);
         p1_ship_container.set_color(Color::from_u32(0x455766));
 
+        
+
+        let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
+        let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
         // Test ship graphics for Player 1
         for n in (0..6).rev()
         {
             // 5px was added to the y pos, and 10px taken off the hight of the ship for vertical padding reasons. 
-            let mut dummy_ship = Frame::new(550, 55 + ((n + 1) * SQUARE_SIZE), (n + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
+            let mut dummy_ship = Frame::new(350, 55 + ((n + 1) * SQUARE_SIZE), (n + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
             dummy_ship.set_frame(FrameType::OvalBox);
             dummy_ship.set_color(Color::from_u32(0xE9ECF0));
         }
-
-        let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
-        let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
-
         wind.end();
         wind.show();
-        // app.run().unwrap();
+        app.run().unwrap();
 
         BattleShipGame
         {
             player_one: Player::new_player(ship_count, Players::PlayerOne),
             player_two: Player::new_player(ship_count, Players::PlayerTwo),
         }
+        
     }
 
     pub fn print_p1_board(&self)
