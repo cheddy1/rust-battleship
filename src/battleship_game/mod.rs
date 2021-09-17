@@ -243,12 +243,9 @@ impl BattleShipGame
 
         // TODO: Test a move
         self.player_one.fire((0, 3));
-        self.player_one.loss_check();
         self.player_one.fire((2, 3));
         self.player_one.fire((0, 0));
         self.player_one.fire((0, 1));
-        self.player_one.loss_check();
         self.player_one.fire((2, 2));
-        self.player_one.loss_check();
     }
 }

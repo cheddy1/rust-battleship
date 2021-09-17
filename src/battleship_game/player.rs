@@ -37,8 +37,14 @@ impl Player
         self.ships_vec.push(Ship::new_ship(self.ships_vec.len() + 1, starting_point, is_vertical));
     }
 
+    pub fn fire(&mut self, pos: (u8, u8))
+    {
+        self.fire_part_2(pos);
+        self.loss_check();
+    }
+
     // Function for being hit on a board
-    pub fn fire(&mut self, pos: (u8, u8)) -> FireState
+    pub fn fire_part_2(&mut self, pos: (u8, u8)) -> FireState
     {
         // Changes the board at the given position to Hit, we shouldn't ever be changing a square
         // from hit to empty so this shouldn't be an issue not having an if
