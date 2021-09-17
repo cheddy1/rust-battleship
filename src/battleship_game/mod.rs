@@ -126,8 +126,12 @@ impl BattleShipGame
     pub fn test(&mut self)
     {
         self.player_one.place_ship((2, 2), false);
+        self.player_one.place_ship((0, 0), true);
 
         // TODO: Test a move
         self.player_one.fire((0, 3));
+        self.player_one.fire((2, 3));
+        self.player_one.fire((0, 0));
+        self.player_one.fire((0, 1));
     }
 }

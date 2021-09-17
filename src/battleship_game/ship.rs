@@ -1,3 +1,5 @@
+use crate::battleship_game::BOARD_WIDTH;
+use crate::battleship_game::BOARD_HEIGHT;
 use crate::battleship_game::data_structures::*;
 
 pub struct Ship
@@ -40,6 +42,19 @@ impl Ship
     {
         // Return a reference to the ship position Vector
         &self.ship_position
+    }
+
+    pub fn update_ship(&mut self, board: &[[ WaterSquare; BOARD_WIDTH ]; BOARD_HEIGHT ])
+    {
+        // This one liner makes me happy
+        // If all board positions that this ship takes up are hit, then we set is_sunk to true
+        self.is_sunk = self.ship_position.iter().all(|pos| board[pos.1 as usize][pos.0 as usize] == WaterSquare::Hit);
+
+        if self.is_sunk
+        {
+            // TODO: Remove this debug
+            println!("YOU SUNK ME WAAAAAA");
+        }
     }
 }
 
