@@ -8,7 +8,8 @@ use crate::battleship_game::player::*;
 use crate::battleship_game::data_structures::*;
 
 // Import FLTK modules for GUI
-use fltk::{
+use fltk::
+{
     app, 
     button::Button, 
     frame::Frame, 
