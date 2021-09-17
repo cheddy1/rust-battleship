@@ -18,7 +18,6 @@ impl Ship
     {
         let mut pos_vec = Vec::new();
 
-
         // TODO: check ship size
 
         // For loop to set ship_position coordinates based off direction

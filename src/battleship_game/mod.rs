@@ -39,12 +39,15 @@ const BOARD_TOP_OFFSET: i32 = 50;
 // repeating the same code to draw two boards, we group up all of the
 // widgets that make up a board into a Board widget. That way, we just
 // have to place two boards on the screen.
-struct Board {
+struct Board
+{
     grp: Group,
 }
 
-impl Board {
-    pub fn new(x: i32, y: i32) -> Self {
+impl Board
+{
+    pub fn new(x: i32, y: i32) -> Self
+    {
         // The constructor of Board is where we arrange all of the
         // coordinate labels and squares.
         let mut grp = Group::new(
@@ -56,7 +59,8 @@ impl Board {
         );
         grp.set_frame(FrameType::FlatBox);
 
-        for (i, c) in ('A'..='J').enumerate() { // (0, 'A'), (1, 'B'),...(9, 'J')
+        for (i, c) in ('A'..='J').enumerate() // (0, 'A'), (1, 'B'),...(9, 'J')
+        {
             // Column Labels
             let mut board_col_label = Frame::new(
                 i as i32 * SQUARE_SIZE + grp.x() + NUM_OFFSET, 
@@ -69,7 +73,8 @@ impl Board {
             board_col_label.set_frame(FrameType::FlatBox);
         }
 
-        for j in 0..BOARD_HEIGHT {
+        for j in 0..BOARD_HEIGHT
+        {
             let mut board_num_label = Frame::new(
                 grp.x(), 
                 j as i32 * SQUARE_SIZE + grp.y() + NUM_OFFSET, 
@@ -80,7 +85,8 @@ impl Board {
             board_num_label.set_label(&(j + 1).to_string());
             board_num_label.set_frame(FrameType::FlatBox);
 
-            for i in 0..BOARD_WIDTH {
+            for i in 0..BOARD_WIDTH
+            {
                 // Build board.
                 let mut temp_btn = Button::new(
                     i as i32 * SQUARE_SIZE + grp.x() + NUM_OFFSET, 
@@ -115,13 +121,16 @@ impl Board {
 // viewed as an alternative to subclassing.
 widget_extends!(Board, Group, grp);
 
-pub struct BattleShipGame {
+pub struct BattleShipGame
+{
     player_one: Player, 
     player_two: Player,
 }
 
-impl BattleShipGame {
-    pub fn init_game(ship_count: usize) -> BattleShipGame {
+impl BattleShipGame
+{
+    pub fn init_game(ship_count: usize) -> BattleShipGame
+    {
         // I dont know where to put this window creation logic, so it can live in init_game for now.
         let app = app::App::default();
         let mut wind = Window::new(100, 100, 1750, 600, "💥 Rust Battleship 💥");
@@ -142,7 +151,8 @@ impl BattleShipGame {
         p1_ship_container.set_color(Color::from_u32(0x455766));
 
         // Test ship graphics for Player 1
-        for n in (0..6).rev() {
+        for n in (0..6).rev()
+        {
             // 5px was added to the y pos, and 10px taken off the hight of the ship for vertical padding reasons. 
             let mut dummy_ship = Frame::new(550, 55 + ((n + 1) * SQUARE_SIZE), (n + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
             dummy_ship.set_frame(FrameType::OvalBox);
@@ -156,21 +166,25 @@ impl BattleShipGame {
         wind.show();
         // app.run().unwrap();
 
-        BattleShipGame {
+        BattleShipGame
+        {
             player_one: Player::new_player(ship_count, Players::PlayerOne),
             player_two: Player::new_player(ship_count, Players::PlayerTwo),
         }
     }
 
-    pub fn print_p1_board(&self) {
+    pub fn print_p1_board(&self)
+    {
         self.player_one.print_board();
     }
 
-    pub fn print_p1_ships(&self) {
+    pub fn print_p1_ships(&self)
+    {
         self.player_one.print_ships();
     }
 
-    pub fn test(&mut self) {
+    pub fn test(&mut self)
+    {
         self.player_one.place_ship((2, 2), false);
         self.player_one.place_ship((0, 0), true);
 
