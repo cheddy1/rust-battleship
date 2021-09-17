@@ -26,41 +26,62 @@ use fltk::{
 const BOARD_WIDTH: usize = 10;
 const BOARD_HEIGHT: usize = 9;
 const SQUARE_SIZE: i32 = 50;
+const NUM_OFFSET: i32 = 50;
 
-const P1_BOARD_LEFT_OFFSET: i32 = 50;
-const P2_BOARD_LEFT_OFFSET: i32 = 900;
+const P1_BOARD_LEFT_OFFSET: i32 = 0;
+const P2_BOARD_LEFT_OFFSET: i32 = 850;
 const BOARD_TOP_OFFSET: i32 = 100;
 
-// Group squares/labels into a board
+// We need to draw two boards on the screen. In order to avoid
+// repeating the same code to draw two boards, we group up all of the
+// widgets that make up a board into a Board widget. That way, we just
+// have to place two boards on the screen.
 struct Board {
     grp: Group,
 }
 
 impl Board {
     pub fn new(x: i32, y: i32) -> Self {
+        // The constructor of Board is where we arrange all of the
+        // coordinate labels and squares.
         let mut grp = Group::new(
             x, 
             y, 
-            BOARD_WIDTH as i32 * SQUARE_SIZE, 
-            BOARD_HEIGHT as i32 * SQUARE_SIZE, 
+            BOARD_WIDTH as i32 * SQUARE_SIZE + NUM_OFFSET, 
+            BOARD_HEIGHT as i32 * SQUARE_SIZE + NUM_OFFSET, 
             None,
         );
         grp.set_frame(FrameType::FlatBox);
+
+        for (i, c) in ('A'..='J').enumerate() { // (0, 'A'), (1, 'B'),...(9, 'J')
+            // Column Labels
+            let mut board_col_label = Frame::new(
+                i as i32 * SQUARE_SIZE + grp.x() + NUM_OFFSET, 
+                grp.y(), 
+                SQUARE_SIZE, 
+                SQUARE_SIZE, 
+                "",
+            );
+            board_col_label.set_label(&c.to_string());
+            board_col_label.set_frame(FrameType::FlatBox);
+        }
+
         for j in 0..BOARD_HEIGHT {
             let mut board_num_label = Frame::new(
                 grp.x(), 
-                j as i32 * SQUARE_SIZE + grp.y(), 
-                SQUARE_SIZE, SQUARE_SIZE, 
+                j as i32 * SQUARE_SIZE + grp.y() + NUM_OFFSET, 
+                SQUARE_SIZE, 
+                SQUARE_SIZE, 
                 "",
             );
             board_num_label.set_label(&(j + 1).to_string());
             board_num_label.set_frame(FrameType::FlatBox);
 
             for i in 0..BOARD_WIDTH {
-                // Build player 1's board.
+                // Build board.
                 let mut temp_btn = Button::new(
-                    i as i32 * SQUARE_SIZE + grp.x(), 
-                    j as i32 * SQUARE_SIZE + grp.y(), 
+                    i as i32 * SQUARE_SIZE + grp.x() + NUM_OFFSET, 
+                    j as i32 * SQUARE_SIZE + grp.y() + NUM_OFFSET, 
                     SQUARE_SIZE, 
                     SQUARE_SIZE, 
                     "~",
@@ -77,10 +98,18 @@ impl Board {
 
         grp.end();
 
-        Self { grp }
+        Self { grp } // In Rust, you can return an expression by simply writing
+        // it as the last line of your function without a semicolon. It's just
+        // a concise way of returning things without having to type the word
+        // "return". Here, our constructor returns the object we just initialized.
     }
 }
 
+// Normally we would subclass FL_Group (https://www.fltk.org/doc-1.1/Fl_Group.html)
+// in order to define our own widget as a collection of widgets.
+// However, Rust doesn't really have subclasses; it has Traits, which are analogous to 
+// Classes in Haskell or Interfaces in Java/C++. Anyway, the following line can be 
+// viewed as an alternative to subclassing.
 widget_extends!(Board, Group, grp);
 
 pub struct BattleShipGame {
