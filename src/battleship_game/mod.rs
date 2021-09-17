@@ -22,6 +22,9 @@ use fltk::{
     widget_extends
 };
 
+// Standard Library stuff
+use std::str;
+
 // Size constants
 const BOARD_WIDTH: usize = 10;
 const BOARD_HEIGHT: usize = 9;
@@ -62,7 +65,7 @@ impl Board {
                 SQUARE_SIZE, 
                 "",
             );
-            board_col_label.set_label(&c.to_string());
+            board_col_label.set_label(str::from_utf8(&[c as u8]).unwrap());
             board_col_label.set_frame(FrameType::FlatBox);
         }
 
