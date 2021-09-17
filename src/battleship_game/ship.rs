@@ -36,9 +36,10 @@ impl Ship
         }
     } 
 
-    pub fn get_ships(&self) -> Vec<(u8, u8)>
+    pub fn get_ships(&self) -> &Vec<(u8, u8)>
     {
-        self.ship_position
+        // Return a reference to the ship position Vector
+        &self.ship_position
     }
 }
 

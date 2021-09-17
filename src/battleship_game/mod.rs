@@ -104,7 +104,7 @@ impl BattleShipGame
 
         wind.end();
         wind.show();
-        app.run().unwrap();
+//        app.run().unwrap();
 
         BattleShipGame
         {
@@ -121,5 +121,13 @@ impl BattleShipGame
     pub fn print_p1_ships(&self)
     {
         self.player_one.print_ships();
+    }
+
+    pub fn test(&mut self)
+    {
+        self.player_one.place_ship((2, 2), false);
+
+        // TODO: Test a move
+        self.player_one.fire((0, 3));
     }
 }

@@ -36,21 +36,34 @@ impl Player
     // Function for being hit on a board
     pub fn fire(&mut self, pos: (u8, u8)) -> FireState
     {
-       FireState::Miss 
+        // Changes the board at the given position to Hit, we shouldn't ever be changing a square
+        // from hit to empty so this shouldn't be an issue not having an if
+        self.board_matrix[pos.1 as usize][pos.0 as usize] = WaterSquare::Hit;
+
+        // We should then see if a ship has been hit
+        //if self.ship_at(pos)
+        //{
+            // If a ship has been hit, then we want to see if it's sunk, and then update that ship
+            // TODO: Finish
+        //}
+
+        FireState::Hit
     }
 
     // Function for returning if there's a ship at a particular location
-    pub fn shit_at(&self, pos: (u8, u8)) -> bool
+    pub fn ship_at(&self, pos: (u8, u8)) -> Option<&Ship>
     {
         for ship in self.ships_vec.iter()
         {
            if ship.get_ships().contains(&pos)
            {
-               return true;
+               // If this spot has a ship in it, return the ship
+               return Some(ship);
            }
         }
 
-        false
+        // If there is no ship in this spot, return none
+        None
     }
 }
 
