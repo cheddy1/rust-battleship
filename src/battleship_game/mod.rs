@@ -144,6 +144,8 @@ pub struct BattleShipGame
     player_one: Player, 
     player_two: Player,
     game_boat_state: BoatState,
+    is_player_one_turn: bool,
+    ship_count_pp: usize, // Ship count per player
 }
 
 impl BattleShipGame
@@ -155,6 +157,8 @@ impl BattleShipGame
             player_one: Player::new_player(ship_count, Players::PlayerOne),
             player_two: Player::new_player(ship_count, Players::PlayerTwo),
             game_boat_state: BoatState::Placed,
+            is_player_one_turn: true,
+            ship_count_pp: ship_count,
         }
     }
     pub fn init_game(&self)
@@ -205,13 +209,15 @@ impl BattleShipGame
         cont_btn.set_selection_color(Color::from_u32(0x397536));
 
         // Hide the screen blocker when clicked.
-        screen_blocker.set_callback(move |btn| {
+        screen_blocker.set_callback(move |btn|
+        {
             println!("Player 1");
             btn.hide();
         });
 
         // Call back for the continue button that blocks the screen with screen_blocker.
-        cont_btn.set_callback(move |btn| {
+        cont_btn.set_callback(move |btn|
+        {
             println!("Player 1");
             screen_blocker.show();
             // btn.hide() // possibly hide or disable when the screen_blocker is shown?
@@ -240,6 +246,82 @@ impl BattleShipGame
         
     }
 
+    // This function will execute the turn for the current player, and will return a bool of
+    // whether or not the game has finished
+    pub fn take_turn(&mut self, pos: (u8, u8)) -> (FireState, Option<&Players>)
+    {
+        // This is gross, I understand that I've copy pasted code and it's not something you're
+        // supposed to do, but I tried using a pointer to point to the current player but rust went
+        // WAAAAAAAAAAAAAAAAA MUTABLE VARIABLES WAAAAAAAAAAAAA I'M A GAY BABY WAAAAAAAAAAAAA
+        if self.is_player_one_turn 
+        {
+            // First we fire on the other player's board
+            let hit_or_miss = self.player_two.fire(pos);
+
+            // Invert the member variable dictating whose turn it is
+            self.is_player_one_turn = !self.is_player_one_turn;
+
+            // Then we return either a Some is victory is achieved, or a None if it hasn't
+            let vic = if self.check_victory() { Some(self.player_one.get_sig()) } else { None };
+
+            (hit_or_miss, vic)
+        }
+        else
+        {
+            // Same idea here
+            let hit_or_miss = self.player_one.fire(pos);
+            self.is_player_one_turn = !self.is_player_one_turn;
+            let vic = if self.check_victory() { Some(self.player_two.get_sig()) } else { None };
+            (hit_or_miss, vic)
+        }
+    }    
+
+    fn check_victory(&self) -> bool
+    {
+       // We invert the self.is_player_one_turn var right before this, so this will look a little
+       // backwards
+       if self.is_player_one_turn
+       {
+           // If this is true, that means it's really player two's turn when this runs, so to check
+           // victory we need to check player one's board
+           self.player_one.all_ships_sunk()
+       }
+       else
+       {
+           self.player_two.all_ships_sunk()
+       }
+    }
+
+    pub fn place_a_ship(&mut self, pos: (u8, u8), is_vertical: bool)
+    {
+        // First thing we want to do is place a ship on the current player
+        if self.is_player_one_turn
+        {
+            self.player_one.place_ship(pos, is_vertical);
+            
+            // After we place the ship, we want to check and make sure we've placed the right amount of
+            // ships on that players board, so we know when to swap to the next player
+            if self.player_one.get_ship_count() >= self.ship_count_pp
+            {
+                self.is_player_one_turn = !self.is_player_one_turn;
+            }
+
+        }
+        else
+        {
+            self.player_two.place_ship(pos, is_vertical);
+
+            if self.player_two.get_ship_count() >= self.ship_count_pp
+            {
+                self.is_player_one_turn = !self.is_player_one_turn;
+            }
+        }
+    }
+}
+
+// Debug block
+impl BattleShipGame
+{
     pub fn print_p1_board(&self)
     {
         self.player_one.print_board();
@@ -252,14 +334,42 @@ impl BattleShipGame
 
     pub fn test(&mut self)
     {
-        self.player_one.place_ship((2, 2), false);
-        self.player_one.place_ship((0, 0), true);
+        // P1 ships
+        self.place_a_ship((2, 2), false);
+        self.place_a_ship((0, 0), true);
 
-        // TODO: Test a move
-        self.player_one.fire((0, 3));
-        self.player_one.fire((2, 3));
-        self.player_one.fire((0, 0));
-        self.player_one.fire((0, 1));
-        self.player_one.fire((2, 2));
+        // P2 ships
+        self.place_a_ship((1, 1), false);
+        self.place_a_ship((3, 3), true);
+
+        // Alternate player turns, starting at p1
+        self.turn_debug((0, 0));
+        self.turn_debug((0, 0));
+        self.turn_debug((5, 5));
+        self.turn_debug((2, 2));
+        self.turn_debug((3, 3));
+        self.turn_debug((0, 1));
+    }
+
+    pub fn turn_debug(&mut self, pos: (u8, u8))
+    {
+        let (hit, vic) = self.take_turn(pos);
+
+        println!("{}, turn for {} at position ({}, {}) resulted in a {}",
+        match vic
+        {
+            Some(_) => "over",
+            None => "playing",
+        },
+        match &mut self.is_player_one_turn
+        {
+            true => "P1",
+            false => "P2",
+        }, pos.0, pos.1,
+        match hit
+        {
+            FireState::Miss => "miss",
+            FireState::Hit => "hit",
+        });
     }
 }

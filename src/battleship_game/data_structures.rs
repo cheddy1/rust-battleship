@@ -11,15 +11,6 @@ pub enum WaterSquare
     Hit,
 }
 
-pub enum ShipType
-{
-    BattleShip,
-    Carrier,
-    Cruiser,
-    Submarine,
-    Destroyer,
-}
-
 pub enum Players
 {
     PlayerOne,

@@ -56,9 +56,9 @@ impl Ship
         }
     }
 
-    pub fn sunk_check(&self) -> bool
+    pub fn get_sunk(&self) -> bool
     {
-        return self.is_sunk;
+        self.is_sunk
     }
 }
 

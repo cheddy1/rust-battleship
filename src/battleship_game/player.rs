@@ -3,16 +3,27 @@ use crate::battleship_game::BOARD_HEIGHT;
 use crate::battleship_game::data_structures::*;
 use crate::battleship_game::ship::*;
 
+/// This is the struct that contains the data for each indiviual player
 pub struct Player
 {
+    /// A matrix of size [`BOARD_WIDTH`] x [`BOARD_HEIGHT`] to store which squares were hit and which
+    /// ones weren't
     board_matrix: [[ WaterSquare; BOARD_WIDTH ]; BOARD_HEIGHT ],
+
+    /// A vector of the ship objects the player has on their board
     ships_vec: Vec<Ship>,
+
+    /// The signature of the player, mostly used to let the front end know which player achieved a
+    /// victory
     player_signature: Players, 
-    has_lost: bool,
 }
 
 impl Player
 {
+    /// Static function that creates a new player object with the given parameters:
+    /// - `ship_count`: the amount of ships that this player should have (currently unused)
+    /// - `player_sig`: the signature of the player in the game, so the code can differentiate which
+    /// player is which 
     pub fn new_player(ship_count: usize, player_sig: Players) -> Player
     {
         // Create a new WaterBoard object where the matrix is iniaialized to all empty squares
@@ -26,25 +37,23 @@ impl Player
             
             // The signature of the player, mostly for checking the player's turn
             player_signature: player_sig, 
-
-            //Player has not lost yet (hopefully)
-            has_lost: false,
-        }
+       }
     }
 
+    /// Function to place a ship on this player, the size of the ship is automatically determined
+    /// by how many ships are already placed on the board
+    /// - `starting_point`: a tuple contiaining the point where the ship should begin
+    /// - `is_vertical`: determines whether or not the ship should be vertical, if this is false, the
+    /// ship will go to the right from `starting_point`, if it's true, then it will go down
     pub fn place_ship(&mut self, starting_point: (u8, u8), is_vertical: bool)
     {
         self.ships_vec.push(Ship::new_ship(self.ships_vec.len() + 1, starting_point, is_vertical));
     }
 
-    pub fn fire(&mut self, pos: (u8, u8))
-    {
-        self.fire_part_2(pos);
-        self.loss_check();
-    }
-
-    // Function for being hit on a board
-    pub fn fire_part_2(&mut self, pos: (u8, u8)) -> FireState
+    /// Function for being hit on a board, this will be called when it's the other player's turn.
+    /// This returns a [`FireState`] so the game knows if it needs to check for sinked ships
+    /// - `pos`: a tuple containing the position on the board that we're firing on 
+    pub fn fire(&mut self, pos: (u8, u8)) -> FireState
     {
         // Changes the board at the given position to Hit, we shouldn't ever be changing a square
         // from hit to empty so this shouldn't be an issue not having an if
@@ -67,33 +76,10 @@ impl Player
 
     }
 
-    // Function to check if all ships are sunk
-    pub fn loss_check(&mut self)
-    {
-        // Whenever it finds a sunk ship, it sets has_lost to true
-        // Whenever it finds an unsunk ship, it sets has_lost to false
-        // and breaks the loop
-        for i in 0..self.ships_vec.len()
-        {
-            if self.ships_vec[i].sunk_check()
-            {
-                self.has_lost = true;
-            }
-            else
-            {
-                self.has_lost = false;
-                break;
-            }
-        }
-
-        // TODO: remove debug print
-        if self.has_lost
-        {
-            println!("git gud");
-        }
-    }
-
-    // Function for returning if there's a ship at a particular location
+    /// Function for returning if there's a ship at a particular location, if there's a ship, this
+    /// returns `Some(i)` with i being the index of the ship at that location in the vector, if
+    /// there's no ship, None is returned instead
+    /// - `pos`: the position to check for a ship at
     pub fn ship_index_at(&self, pos: (u8, u8)) -> Option<usize>
     {
         // Enumerate gives us an interator with a two tuple, the first value is the index of
@@ -110,11 +96,32 @@ impl Player
         // If there is no ship in this spot, return none
         None
     }
+
+    /// This checks if all the ships that this player has on their board have sunk, returns
+    /// respective bool value
+    pub fn all_ships_sunk(&self) -> bool
+    {
+        self.ships_vec.iter().all(|ship| ship.get_sunk())
+    }
+
+    /// Returns the amount of ships the player has on their board
+    // TODO: I have no idea if we even need this function, we may be able to remove this
+    pub fn get_ship_count(&self) -> usize
+    {
+        self.ships_vec.len()
+    }
+
+    /// Gets the player signature, mostly to know at the end which player has won the game
+    pub fn get_sig(&self) -> &Players
+    {
+        return &self.player_signature;
+    }
 }
 
 // Debug implementation for printing a player's board
 impl Player
 {
+    /// Prints the vectors of the ships the player has into the command line, mostly for debugging
     pub fn print_ships(&self)
     {
         for ship in self.ships_vec.iter()
@@ -123,6 +130,7 @@ impl Player
         }
     }
 
+    /// Prints the board to show which squares are hit and which ones are not to the command line, mostly for debugging
     pub fn print_board(&self)
     {
         print!("["); // Start the array in the print
