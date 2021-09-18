@@ -73,6 +73,16 @@ impl Player
         // If there is no ship in this spot, return none
         None
     }
+
+    pub fn all_ships_sunk(&self) -> bool
+    {
+        self.ships_vec.iter().all(|ship| ship.get_sunk())
+    }
+
+    pub fn get_sig(&self) -> &Players
+    {
+        return &self.player_signature;
+    }
 }
 
 // Debug implementation for printing a player's board

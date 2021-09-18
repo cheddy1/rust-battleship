@@ -126,6 +126,7 @@ pub struct BattleShipGame
 {
     player_one: Player, 
     player_two: Player,
+    is_player_one_turn: bool,
 }
 
 impl BattleShipGame
@@ -171,9 +172,55 @@ impl BattleShipGame
         {
             player_one: Player::new_player(ship_count, Players::PlayerOne),
             player_two: Player::new_player(ship_count, Players::PlayerTwo),
+            is_player_one_turn: true,
         }
     }
 
+    // This function will execute the turn for the current player, and will return a bool of
+    // whether or not the game has finished
+    pub fn take_turn(&mut self, pos: (u8, u8)) -> Option<&Players>
+    {
+        // This is gross, I understand that I've copy pasted code and it's not something you're
+        // supposed to do, but I tried using a pointer to point to the current player but rust went
+        // WAAAAAAAAAAAAAAAAA MUTABLE VARIABLES WAAAAAAAAAAAAA I'M A GAY BABY WAAAAAAAAAAAAA
+        if self.is_player_one_turn 
+        {
+            // First we fire on the other player's board
+            self.player_two.fire(pos);
+
+            // Invert the member variable dictating whose turn it is
+            self.is_player_one_turn = !self.is_player_one_turn;
+
+            // Then we return either a Some is victory is achieved, or a None if it hasn't
+            if self.check_victory() { Some(self.player_one.get_sig()) } else { None }
+        }
+        else
+        {
+            // Same idea here
+            self.player_one.fire(pos);
+            self.is_player_one_turn = !self.is_player_one_turn;
+            if self.check_victory() { Some(self.player_two.get_sig()) } else { None }  
+        }
+    }    
+
+    fn check_victory(&self) -> bool
+    {
+       // We invert the self.is_player_one_turn var right before this, so this will look a little
+       // backwards
+       if self.is_player_one_turn
+       {
+           // If this is true, that means it's really player two's turn when this runs, so to check
+           // victory we need to check player one's board
+           self.player_one
+       }
+
+       return false;
+    }
+}
+
+// Debug block
+impl BattleShipGame
+{
     pub fn print_p1_board(&self)
     {
         self.player_one.print_board();

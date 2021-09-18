@@ -55,6 +55,11 @@ impl Ship
             println!("YOU SUNK ME WAAAAAA");
         }
     }
+
+    pub fn get_sunk(&self) -> bool
+    {
+        self.is_sunk
+    }
 }
 
 
