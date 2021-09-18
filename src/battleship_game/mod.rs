@@ -131,15 +131,33 @@ impl Board
 // viewed as an alternative to subclassing.
 widget_extends!(Board, Group, grp);
 
+// Now we need to keep track of whether our boats are being moved on the screen
+// or not.
+enum BoatState
+{
+    Placed,
+    Moving(Frame),
+}
+
 pub struct BattleShipGame
 {
     player_one: Player, 
     player_two: Player,
+    game_boat_state: BoatState,
 }
 
 impl BattleShipGame
 {
-    pub fn init_game(ship_count: usize) -> BattleShipGame
+    pub fn new(ship_count: usize) -> Self
+    {
+        BattleShipGame
+        {
+            player_one: Player::new_player(ship_count, Players::PlayerOne),
+            player_two: Player::new_player(ship_count, Players::PlayerTwo),
+            game_boat_state: BoatState::Placed,
+        }
+    }
+    pub fn init_game(&self)
     {
         // I dont know where to put this window creation logic, so it can live in init_game for now.
         let app = app::App::default();
@@ -160,6 +178,12 @@ impl BattleShipGame
             let mut dummy_ship = Frame::new(350, 55 + ((n + 1) * SQUARE_SIZE), (n + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
             dummy_ship.set_frame(FrameType::OvalBox);
             dummy_ship.set_color(Color::from_u32(0xE9ECF0));
+            dummy_ship.set_callback(|s| {
+                match self.game_boat_state
+                {
+
+                }
+            });
         }
 
 
@@ -209,15 +233,10 @@ impl BattleShipGame
             ""
         );
 
+
         wind.end();
         wind.show();
         app.run().unwrap();
-
-        BattleShipGame
-        {
-            player_one: Player::new_player(ship_count, Players::PlayerOne),
-            player_two: Player::new_player(ship_count, Players::PlayerTwo),
-        }
         
     }
 
