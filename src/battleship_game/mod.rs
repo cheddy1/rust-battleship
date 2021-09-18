@@ -108,6 +108,12 @@ impl Board
                 });
             }
         }
+        // Create new frame for a container that holds player 1's ships
+        let end_of_squares = grp.x() + NUM_OFFSET + (SQUARE_SIZE * BOARD_WIDTH as i32);
+        let top_of_squares = grp.y() + NUM_OFFSET;
+        let mut ship_container = Frame::new(end_of_squares, top_of_squares, 300, 450, "");
+        ship_container.set_frame(FrameType::BorderBox);
+        ship_container.set_color(Color::from_u32(0x455766));
 
         grp.end();
 
@@ -144,17 +150,6 @@ impl BattleShipGame
         //let mut p2_button_ary = [[Button::default(); 9]; 10];
 
         // TODO: Move to separate module
-        // Create new frame for a container that holds player 1's ships
-        let mut p1_ship_container = Frame::new(550, 100, 300, 450, "");
-        p1_ship_container.set_frame(FrameType::BorderBox);
-        p1_ship_container.set_color(Color::from_u32(0x455766));
-
-        // Create new frame for a container that holds player 1's ships
-        let mut p1_ship_container = Frame::new(1400, 100, 300, 450, "");
-        p1_ship_container.set_frame(FrameType::BorderBox);
-        p1_ship_container.set_color(Color::from_u32(0x455766));
-
-        
 
         let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
         let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
