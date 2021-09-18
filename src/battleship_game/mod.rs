@@ -227,7 +227,7 @@ impl BattleShipGame
 
     // This function will execute the turn for the current player, and will return a bool of
     // whether or not the game has finished
-    pub fn take_turn(&mut self, pos: (u8, u8)) -> Option<&Players>
+    pub fn take_turn(&mut self, pos: (u8, u8)) -> (FireState, Option<&Players>)
     {
         // This is gross, I understand that I've copy pasted code and it's not something you're
         // supposed to do, but I tried using a pointer to point to the current player but rust went
@@ -235,20 +235,23 @@ impl BattleShipGame
         if self.is_player_one_turn 
         {
             // First we fire on the other player's board
-            self.player_two.fire(pos);
+            let hit_or_miss = self.player_two.fire(pos);
 
             // Invert the member variable dictating whose turn it is
             self.is_player_one_turn = !self.is_player_one_turn;
 
             // Then we return either a Some is victory is achieved, or a None if it hasn't
-            if self.check_victory() { Some(self.player_one.get_sig()) } else { None }
+            let vic = if self.check_victory() { Some(self.player_one.get_sig()) } else { None };
+
+            (hit_or_miss, vic)
         }
         else
         {
             // Same idea here
-            self.player_one.fire(pos);
+            let hit_or_miss = self.player_one.fire(pos);
             self.is_player_one_turn = !self.is_player_one_turn;
-            if self.check_victory() { Some(self.player_two.get_sig()) } else { None }  
+            let vic = if self.check_victory() { Some(self.player_two.get_sig()) } else { None };
+            (hit_or_miss, vic)
         }
     }    
 

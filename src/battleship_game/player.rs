@@ -8,7 +8,6 @@ pub struct Player
     board_matrix: [[ WaterSquare; BOARD_WIDTH ]; BOARD_HEIGHT ],
     ships_vec: Vec<Ship>,
     player_signature: Players, 
-    has_lost: bool,
 }
 
 impl Player
@@ -26,10 +25,7 @@ impl Player
             
             // The signature of the player, mostly for checking the player's turn
             player_signature: player_sig, 
-
-            //Player has not lost yet (hopefully)
-            has_lost: false,
-        }
+       }
     }
 
     pub fn place_ship(&mut self, starting_point: (u8, u8), is_vertical: bool)
@@ -37,14 +33,8 @@ impl Player
         self.ships_vec.push(Ship::new_ship(self.ships_vec.len() + 1, starting_point, is_vertical));
     }
 
-    pub fn fire(&mut self, pos: (u8, u8))
-    {
-        self.fire_part_2(pos);
-        self.loss_check();
-    }
-
     // Function for being hit on a board
-    pub fn fire_part_2(&mut self, pos: (u8, u8)) -> FireState
+    pub fn fire(&mut self, pos: (u8, u8)) -> FireState
     {
         // Changes the board at the given position to Hit, we shouldn't ever be changing a square
         // from hit to empty so this shouldn't be an issue not having an if
@@ -65,32 +55,6 @@ impl Player
             None => FireState::Miss
         }
 
-    }
-
-    // Function to check if all ships are sunk
-    pub fn loss_check(&mut self)
-    {
-        // Whenever it finds a sunk ship, it sets has_lost to true
-        // Whenever it finds an unsunk ship, it sets has_lost to false
-        // and breaks the loop
-        for i in 0..self.ships_vec.len()
-        {
-            if self.ships_vec[i].sunk_check()
-            {
-                self.has_lost = true;
-            }
-            else
-            {
-                self.has_lost = false;
-                break;
-            }
-        }
-
-        // TODO: remove debug print
-        if self.has_lost
-        {
-            println!("git gud");
-        }
     }
 
     // Function for returning if there's a ship at a particular location
