@@ -102,9 +102,18 @@ impl Board
                 temp_btn.set_selection_color(Color::from_u32(0x1a2b38));
 
                 // Custom function can replace println in future!
-                temp_btn.set_callback(move |_| println!("Player 1 {},{}", i, j));
+                temp_btn.set_callback(move |btn| {
+                    println!("Player 1 {},{}", i, j);
+                    btn.set_color(Color::from_u32(0x00000A));
+                });
             }
         }
+        // Create new frame for a container that holds player 1's ships
+        let end_of_squares = grp.x() + NUM_OFFSET + (SQUARE_SIZE * BOARD_WIDTH as i32);
+        let top_of_squares = grp.y() + NUM_OFFSET;
+        let mut ship_container = Frame::new(end_of_squares, top_of_squares, 300, 450, "");
+        ship_container.set_frame(FrameType::BorderBox);
+        ship_container.set_color(Color::from_u32(0x455766));
 
         grp.end();
 
@@ -142,31 +151,70 @@ impl BattleShipGame
         //let mut p2_button_ary = [[Button::default(); 9]; 10];
 
         // TODO: Move to separate module
-        // Create new frame for a container that holds player 1's ships
-        let mut p1_ship_container = Frame::new(550, 100, 300, 450, "");
-        p1_ship_container.set_frame(FrameType::BorderBox);
-        p1_ship_container.set_color(Color::from_u32(0x455766));
 
-        // Create new frame for a container that holds player 1's ships
-        let mut p1_ship_container = Frame::new(1400, 100, 300, 450, "");
-        p1_ship_container.set_frame(FrameType::BorderBox);
-        p1_ship_container.set_color(Color::from_u32(0x455766));
-
+        let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
+        let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
         // Test ship graphics for Player 1
         for n in (0..6).rev()
         {
             // 5px was added to the y pos, and 10px taken off the hight of the ship for vertical padding reasons. 
-            let mut dummy_ship = Frame::new(550, 55 + ((n + 1) * SQUARE_SIZE), (n + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
+            let mut dummy_ship = Frame::new(350, 55 + ((n + 1) * SQUARE_SIZE), (n + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
             dummy_ship.set_frame(FrameType::OvalBox);
             dummy_ship.set_color(Color::from_u32(0xE9ECF0));
         }
 
-        let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
-        let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
+
+        // This is a concept of drawing a box to the screen. We can keep it for now as a backup.
+        // let mut screen_blocker1 = fltk::draw::draw_box(FrameType::FlatBox, 0, 0, 1750, 600, Color::from_u32(0x00000A));
+
+        // Button that covers the screen between turns.
+        let mut screen_blocker = Button::new(0, 0, 1750, 600, "Click here to start your turn.");
+
+        screen_blocker.set_frame(FrameType::FlatBox);
+        screen_blocker.set_color(Color::from_u32(0xC0C0C0));
+        screen_blocker.hide();
+
+        // Button that indicates a user is finished looking a the board after a turn.
+        let mut cont_btn = Button::new( 1600, 555, 100, 40, "Continue");
+
+        cont_btn.set_frame(FrameType::ThinUpBox);
+        cont_btn.set_color(Color::from_u32(0x4C9C48));
+        cont_btn.set_selection_color(Color::from_u32(0x397536));
+
+        // Hide the screen blocker when clicked.
+        screen_blocker.set_callback(move |btn|
+        {
+            println!("Player 1");
+            btn.hide();
+        });
+
+        // Call back for the continue button that blocks the screen with screen_blocker.
+        cont_btn.set_callback(move |btn|
+        {
+            println!("Player 1");
+            screen_blocker.show();
+            // btn.hide() // possibly hide or disable when the screen_blocker is shown?
+        });
+
+        
+        // Cool alert... we can delete once we know we dont need it.
+        // fltk::dialog::alert(
+        //     875, 
+        //     300, 
+        //     "Dissmiss to start your turn."
+        // );
+
+        // Dont know how to set a callback for this yet, or require valid input.
+        let mut ship_input = fltk::dialog::input(
+            875, 
+            300, 
+            "How many ships do you want to play with?",
+            ""
+        );
 
         wind.end();
         wind.show();
-        // app.run().unwrap();
+        app.run().unwrap();
 
         BattleShipGame
         {
@@ -174,6 +222,7 @@ impl BattleShipGame
             player_two: Player::new_player(ship_count, Players::PlayerTwo),
             is_player_one_turn: true,
         }
+        
     }
 
     // This function will execute the turn for the current player, and will return a bool of
@@ -241,5 +290,6 @@ impl BattleShipGame
         self.player_one.fire((2, 3));
         self.player_one.fire((0, 0));
         self.player_one.fire((0, 1));
+        self.player_one.fire((2, 2));
     }
 }
