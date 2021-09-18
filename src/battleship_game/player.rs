@@ -80,6 +80,11 @@ impl Player
         self.ships_vec.iter().all(|ship| ship.get_sunk())
     }
 
+    pub fn get_ship_count(&self) -> usize
+    {
+        self.ships_vec.len()
+    }
+
     pub fn get_sig(&self) -> &Players
     {
         return &self.player_signature;
