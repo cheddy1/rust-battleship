@@ -260,10 +260,12 @@ impl BattleShipGame
        {
            // If this is true, that means it's really player two's turn when this runs, so to check
            // victory we need to check player one's board
-           self.player_one
+           self.player_one.all_ships_sunk()
        }
-
-       return false;
+       else
+       {
+           self.player_two.all_ships_sunk()
+       }
     }
 }
 
