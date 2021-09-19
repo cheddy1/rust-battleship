@@ -139,17 +139,28 @@ enum BoatState
     Moving(Frame),
 }
 
+/// This is the main game logic handler, it holds both play objects, and therefore both boards and
+/// all the ships on the board
 pub struct BattleShipGame
 {
+    /// The object that holds the first player
     player_one: Player, 
+
+    /// The object that holds the second player
     player_two: Player,
     game_boat_state: BoatState,
+
+    /// This variable keeps track of whose turn it is
     is_player_one_turn: bool,
+
+    /// This stores how many ship each player should have on their board
     ship_count_pp: usize, // Ship count per player
 }
 
 impl BattleShipGame
 {
+    /// This is the method you should use to make a new game object, all it needs is:
+    /// - `ship_count`: the amount of ships each player should have on their board
     pub fn new(ship_count: usize) -> Self
     {
         BattleShipGame
@@ -246,8 +257,9 @@ impl BattleShipGame
         
     }
 
-    // This function will execute the turn for the current player, and will return a bool of
-    // whether or not the game has finished
+    /// This function will execute the turn for the current player, and will return both whether a
+    /// ship was hit or not, as well as if there's a winner after this turn
+    /// - `pos`: a two tuple holding the position we're taking the turn at
     pub fn take_turn(&mut self, pos: (u8, u8)) -> (FireState, Option<&Players>)
     {
         // This is gross, I understand that I've copy pasted code and it's not something you're
@@ -276,6 +288,8 @@ impl BattleShipGame
         }
     }    
 
+    /// This is a private function that will check to see if there's been a victory from either
+    /// player
     fn check_victory(&self) -> bool
     {
        // We invert the self.is_player_one_turn var right before this, so this will look a little
@@ -292,6 +306,10 @@ impl BattleShipGame
        }
     }
 
+    /// This is the top level function to place a ship, this places a ship on the players board, if
+    /// the game has X boards per player, then after X board this function switches back to the
+    /// next player. If for some reason X ships are placed for player one, then X for player two,
+    /// anymore will be placed on the board for player one
     pub fn place_a_ship(&mut self, pos: (u8, u8), is_vertical: bool)
     {
         // First thing we want to do is place a ship on the current player
