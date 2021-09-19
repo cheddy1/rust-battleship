@@ -310,7 +310,7 @@ impl BattleShipGame
             let mut input = String::new();
             println!("How many ships will you play with?");
             io::stdin().read_line(&mut input).expect("Failed to read line");
-            ship_count = input.trim().parse::<usize>().unwrap();
+            ship_count = input.trim().parse::<usize>().unwrap_or(0);
 
             if ship_count < 1 || ship_count > 6
             {
@@ -410,7 +410,7 @@ impl BattleShipGame
                         println!("Vertical or horizontal?(v/h)");
                         let mut input = String::new();
                         io::stdin().read_line(&mut input).expect("Failed to read line");
-                        let choice = input.trim().parse::<char>().unwrap();
+                        let choice = input.trim().parse::<char>().unwrap_or('x');
                         if choice == 'v' || choice == 'V'
                         {
                             vertical = true;
@@ -434,7 +434,7 @@ impl BattleShipGame
                         let mut input = String::new();
                         println!("Choose a row to start ship {} at", i+1);
                         io::stdin().read_line(&mut input).expect("Failed to read line");
-                        row = input.trim().parse::<usize>().unwrap();
+                        row = input.trim().parse::<usize>().unwrap_or(0);
                         if row < 1 || row > 9
                         {
                             println!("Invalid input");
@@ -456,7 +456,7 @@ impl BattleShipGame
                         let mut input = String::new();
                         println!("Choose a column to start ship {} at", i+1);
                         io::stdin().read_line(&mut input).expect("Failed to read line");
-                        col_char = input.trim().parse::<char>().unwrap();
+                        col_char = input.trim().parse::<char>().unwrap_or('x');
                         col = self.char_convert(col_char);
                         if col < 1 || row > 10
                         {
@@ -614,7 +614,7 @@ impl BattleShipGame
 
                 println!("Choose a row:");
                 io::stdin().read_line(&mut input).expect("Failed to read line");
-                row = input.trim().parse::<usize>().unwrap();
+                row = input.trim().parse::<usize>().unwrap_or(0);
 
                 // I have had to add this line so many times
                 // and every time I forgot to do it
@@ -622,7 +622,7 @@ impl BattleShipGame
 
                 println!("Choose a column:");
                 io::stdin().read_line(&mut input).expect("Failed to read line");
-                col_char = input.trim().parse::<char>().unwrap();
+                col_char = input.trim().parse::<char>().unwrap_or('x');
                 col = self.char_convert(col_char);
 
                 // Do you feel it now Mr. Krabs???
