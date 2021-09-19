@@ -1,3 +1,6 @@
+// uses
+use std::io;
+
 // Import the sub-modules
 mod data_structures;
 mod player;
@@ -8,6 +11,7 @@ use crate::battleship_game::player::*;
 use crate::battleship_game::data_structures::*;
 
 // Import FLTK modules for GUI
+#[allow(unused_imports)]
 use fltk::
 {
     app, 
@@ -136,8 +140,10 @@ pub struct BattleShipGame
     player_one: Player, 
     player_two: Player,
     is_player_one_turn: bool,
+    ship_count: usize,
 }
 
+#[allow(dead_code, unused_variables, unused_mut, unused_parens, unused_assignments)]
 impl BattleShipGame
 {
     pub fn init_game(ship_count: usize) -> BattleShipGame
@@ -205,25 +211,42 @@ impl BattleShipGame
         // );
 
         // Dont know how to set a callback for this yet, or require valid input.
-        let mut ship_input = fltk::dialog::input(
+        /*let mut ship_input = fltk::dialog::input(
             875, 
             300, 
             "How many ships do you want to play with?",
             ""
-        );
+        );*/
 
         wind.end();
         wind.show();
-        app.run().unwrap();
+        //app.run().unwrap();
 
+        
         BattleShipGame
         {
             player_one: Player::new_player(ship_count, Players::PlayerOne),
             player_two: Player::new_player(ship_count, Players::PlayerTwo),
             is_player_one_turn: true,
+            ship_count: ship_count,
         }
         
     }
+
+
+
+
+
+
+
+    // RELEVANT CODE BEGINS BELOW
+
+
+
+
+
+
+
 
     // This function will execute the turn for the current player, and will return a bool of
     // whether or not the game has finished
@@ -270,14 +293,271 @@ impl BattleShipGame
            self.player_two.all_ships_sunk()
        }
     }
+
+    // Now we begin a CLI backup plan
+    // Everything beyond here was perhaps rushed and can be
+    // cleaned up if need be
+
+    // Initialize the game
+    // TODO: Document
+    pub fn begin() -> BattleShipGame
+    {
+        // Obtain ship count
+        let mut ship_count = 0;
+        let mut correct_input = false;
+        while  !correct_input
+        {
+            let mut input = String::new();
+            println!("How many ships will you play with?");
+            io::stdin().read_line(&mut input).expect("Failed to read line");
+            ship_count = input.trim().parse::<usize>().unwrap();
+
+            if ship_count < 1 || ship_count > 6
+            {
+                println!("Must be between 1 and 6");
+            }
+            else
+            {
+                correct_input = true;
+            }
+        }
+
+        BattleShipGame
+        {
+            player_one: Player::new_player(ship_count, Players::PlayerOne),
+            player_two: Player::new_player(ship_count, Players::PlayerTwo),
+            is_player_one_turn: true,
+            ship_count: ship_count,
+        }
+    }
+
+    // Time to make the game actually play
+    // TODO: Document
+    pub fn place_ships(&mut self)
+    {
+        let mut row: usize;
+        let mut col: usize;
+        let mut vertical = true;
+
+        // This line, which will be used again later, clears the terminal
+        print!("{esc}c", esc = 27 as char);
+        
+        // I apoloogize for this, but it's too late to do this in a prettier way
+        // something something mutable reference
+        for n in 1..=2
+        {
+            if n == 1
+            {
+                println!("Player 2, please look away");
+                println!("Player 1, time to place your ships");
+            }
+            else 
+            {
+                println!("Player 1, please look away");
+                println!("Player 2, time to place your ships");
+            }
+            for i in 0..self.ship_count
+            {
+                row = 0;
+                col = 0;
+                println!("Your board so far:");
+                if n == 1
+                {
+                    self.player_one.print_board(true);
+                }
+                else 
+                {
+                    self.player_two.print_board(true);
+                }
+
+                // Get verti or hori
+                let mut correct_input = false;
+                while !correct_input
+                {
+                    println!("Vertical or horizontal?(v/h)");
+                    let mut input = String::new();
+                    io::stdin().read_line(&mut input).expect("Failed to read line");
+                    let choice = input.trim().parse::<char>().unwrap();
+                    if choice == 'v' || choice == 'V'
+                    {
+                        vertical = true;
+                        correct_input = true;
+                    }
+                    else if choice == 'h' || choice == 'H'
+                    {
+                        vertical = false;
+                        correct_input = true;
+                    }
+                    else 
+                    {
+                        println!("Invalid choice");
+                    }
+                }
+
+                // Get row
+                correct_input = false;
+                while !correct_input
+                {
+                    let mut input = String::new();
+                    println!("Choose a row to start ship {} at", i+1);
+                    io::stdin().read_line(&mut input).expect("Failed to read line");
+                    row = input.trim().parse::<usize>().unwrap();
+                    if row < 1 || row > 9
+                    {
+                        println!("Invalid input");
+                    }
+                    else if row + i > 9 && vertical
+                    {
+                        println!("Ship cannot go there")
+                    }
+                    else
+                    {
+                        correct_input = true;
+                    }
+                }
+
+                // Get column
+                correct_input = false;
+                while !correct_input
+                {
+                    let mut input = String::new();
+                    println!("Choose a column to start ship {} at", i+1);
+                    io::stdin().read_line(&mut input).expect("Failed to read line");
+                    col = input.trim().parse::<usize>().unwrap();
+                    if col < 1 || row > 10
+                    {
+                        println!("Invalid input");
+                    }
+                    else if col + i > 10 && !vertical
+                    {
+                        println!("Ship cannot go there")
+                    }
+                    else
+                    {
+                        correct_input = true;
+                    }
+                }
+                
+                // Place a ship
+                if n == 1
+                {
+                    self.player_one.place_ship((row as u8 - 1, col as u8 - 1), !vertical);
+                }
+                else 
+                {
+                    self.player_two.place_ship((row as u8 - 1, col as u8 - 1), !vertical);
+                }
+                print!("{esc}c", esc = 27 as char);
+            }
+        }
+    }
+
+    // This will loop until the game is over
+    pub fn play_game(&mut self)
+    {
+        let mut game_over = false;
+        while !game_over
+        {
+            let mut correct_input = false;
+            print!("{esc}c", esc = 27 as char);
+            println!("Your ships:");
+
+            // Every day we stray further from God's light
+            // WHY ARE THE PLAYERS NOT A VECTOR FOR FUCKS SAKE
+            // Enjoy the if statements
+            if self.is_player_one_turn
+            {
+                self.player_one.print_board(true);
+            }
+            else
+            {
+                self.player_two.print_board(true);
+            }
+            println!("Your opponent's board so far:");
+            if self.is_player_one_turn
+            {
+                self.player_two.print_board(false);
+            }
+            else
+            {
+                self.player_one.print_board(false);
+            }
+
+            // Since there's no UI, you can trust that some dumbass won't pass unusable coordinates
+            // hence a while loop
+            while !correct_input
+            {
+                let mut row = 0;
+                let mut col = 0;
+                let mut input = String::new();
+                println!("Time to make an attack!");
+
+                println!("Choose a row:");
+                io::stdin().read_line(&mut input).expect("Failed to read line");
+                row = input.trim().parse::<usize>().unwrap();
+
+                // I have had to add this line so many times
+                // and every time I forgot to do it
+                input = String::new();
+
+                println!("Choose a column:");
+                io::stdin().read_line(&mut input).expect("Failed to read line");
+                col = input.trim().parse::<usize>().unwrap();
+
+                // Do you feel it now Mr. Krabs???
+                if row < 1 || row > 9 || col < 1 || col > 10
+                {
+                    println!("Invalid coordinates");
+                }
+                else if self.is_player_one_turn && self.player_two.is_attacked(row-1, col-1)
+                {
+                    println!("Already attacked there");
+                }
+                else if !self.is_player_one_turn && self.player_one.is_attacked(row-1, col-1)
+                {
+                    println!("Already attacked there");
+                }
+                else
+                {
+                    correct_input = true;
+                    self.take_turn((col as u8 - 1, row as u8 - 1));
+                }
+            }
+            if self.check_victory()
+            {
+                // It's done
+                // The game's finally over
+                game_over = true;
+
+                // But my work is not
+                print!("{esc}c", esc = 27 as char);
+                println!("Player one's final board:");
+                self.player_one.print_board(true);
+                println!("Player two's final board:");
+                self.player_two.print_board(true);
+
+                // This flips before checking the win, so whoever's turn it is
+                // is the loser
+                if self.is_player_one_turn
+                {
+                    println!("Congratulations player 2!");
+                }
+                else
+                {
+                    println!("Congratulations player 1!");
+                }
+            }
+        }
+    }
 }
 
 // Debug block
+#[allow(dead_code)]
 impl BattleShipGame
 {
     pub fn print_p1_board(&self)
     {
-        self.player_one.print_board();
+        self.player_one.print_board(false);
     }
 
     pub fn print_p1_ships(&self)

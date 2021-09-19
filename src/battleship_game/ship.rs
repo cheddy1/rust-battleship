@@ -60,6 +60,11 @@ impl Ship
     {
         self.is_sunk
     }
+
+    pub fn get_len(&self) -> usize
+    {
+        return self.ship_position.len();
+    }
 }
 
 
