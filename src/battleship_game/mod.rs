@@ -441,7 +441,7 @@ impl BattleShipGame
                         }
                         else if row + i > 9 && vertical
                         {
-                            println!("Ship cannot go there")
+                            println!("Ship cannot go there");
                         }
                         else
                         {
@@ -464,7 +464,7 @@ impl BattleShipGame
                         }
                         else if col + i > 10 && !vertical
                         {
-                            println!("Ship cannot go there")
+                            println!("Ship cannot go there");
                         }
                         else
                         {
@@ -484,6 +484,7 @@ impl BattleShipGame
                                 }
                                 else
                                 {
+                                    print!("{esc}c", esc = 27 as char);
                                     println!("There is already a ship there");
                                     ship_conflict = true;
                                     break;
@@ -497,6 +498,7 @@ impl BattleShipGame
                                 }
                                 else
                                 {
+                                    print!("{esc}c", esc = 27 as char);
                                     println!("There is already a ship there");
                                     ship_conflict = true;
                                     break;
@@ -516,6 +518,7 @@ impl BattleShipGame
                                 }
                                 else
                                 {
+                                    print!("{esc}c", esc = 27 as char);
                                     println!("There is already a ship there");
                                     ship_conflict = true;
                                     break;
@@ -529,6 +532,7 @@ impl BattleShipGame
                                 }
                                 else
                                 {
+                                    print!("{esc}c", esc = 27 as char);
                                     println!("There is already a ship there");
                                     ship_conflict = true;
                                     break;
@@ -598,7 +602,7 @@ impl BattleShipGame
                 self.player_one.print_board(false);
             }
 
-            // Since there's no UI, you can trust that some dumbass won't pass unusable coordinates
+            // Since there's no UI, you can't trust that some dumbass won't pass unusable coordinates
             // hence a while loop
             while !correct_input
             {
