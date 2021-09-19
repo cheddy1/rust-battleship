@@ -388,97 +388,169 @@ impl BattleShipGame
             }
             for i in 0..self.ship_count
             {
-                row = 0;
-                col = 0;
-                println!("Your board so far:");
-                if n == 1
+                let mut ship_conflict = true;
+                while ship_conflict
                 {
-                    self.player_one.print_board(true);
-                }
-                else 
-                {
-                    self.player_two.print_board(true);
-                }
-
-                // Get verti or hori
-                let mut correct_input = false;
-                while !correct_input
-                {
-                    println!("Vertical or horizontal?(v/h)");
-                    let mut input = String::new();
-                    io::stdin().read_line(&mut input).expect("Failed to read line");
-                    let choice = input.trim().parse::<char>().unwrap();
-                    if choice == 'v' || choice == 'V'
+                    row = 0;
+                    col = 0;
+                    println!("Your board so far:");
+                    if n == 1
                     {
-                        vertical = true;
-                        correct_input = true;
-                    }
-                    else if choice == 'h' || choice == 'H'
-                    {
-                        vertical = false;
-                        correct_input = true;
+                        self.player_one.print_board(true);
                     }
                     else 
                     {
-                        println!("Invalid choice");
+                        self.player_two.print_board(true);
                     }
-                }
 
-                // Get row
-                correct_input = false;
-                while !correct_input
-                {
-                    let mut input = String::new();
-                    println!("Choose a row to start ship {} at", i+1);
-                    io::stdin().read_line(&mut input).expect("Failed to read line");
-                    row = input.trim().parse::<usize>().unwrap();
-                    if row < 1 || row > 9
+                    // Get verti or hori
+                    let mut correct_input = false;
+                    while !correct_input
                     {
-                        println!("Invalid input");
+                        println!("Vertical or horizontal?(v/h)");
+                        let mut input = String::new();
+                        io::stdin().read_line(&mut input).expect("Failed to read line");
+                        let choice = input.trim().parse::<char>().unwrap();
+                        if choice == 'v' || choice == 'V'
+                        {
+                            vertical = true;
+                            correct_input = true;
+                        }
+                        else if choice == 'h' || choice == 'H'
+                        {
+                            vertical = false;
+                            correct_input = true;
+                        }
+                        else 
+                        {
+                            println!("Invalid choice");
+                        }
                     }
-                    else if row + i > 9 && vertical
-                    {
-                        println!("Ship cannot go there")
-                    }
-                    else
-                    {
-                        correct_input = true;
-                    }
-                }
 
-                // Get column
-                correct_input = false;
-                while !correct_input
-                {
-                    let mut input = String::new();
-                    println!("Choose a column to start ship {} at", i+1);
-                    io::stdin().read_line(&mut input).expect("Failed to read line");
-                    col_char = input.trim().parse::<char>().unwrap();
-                    col = self.char_convert(col_char);
-                    if col < 1 || row > 10
+                    // Get row
+                    correct_input = false;
+                    while !correct_input
                     {
-                        println!("Invalid input");
+                        let mut input = String::new();
+                        println!("Choose a row to start ship {} at", i+1);
+                        io::stdin().read_line(&mut input).expect("Failed to read line");
+                        row = input.trim().parse::<usize>().unwrap();
+                        if row < 1 || row > 9
+                        {
+                            println!("Invalid input");
+                        }
+                        else if row + i > 9 && vertical
+                        {
+                            println!("Ship cannot go there")
+                        }
+                        else
+                        {
+                            correct_input = true;
+                        }
                     }
-                    else if col + i > 10 && !vertical
+
+                    // Get column
+                    correct_input = false;
+                    while !correct_input
                     {
-                        println!("Ship cannot go there")
+                        let mut input = String::new();
+                        println!("Choose a column to start ship {} at", i+1);
+                        io::stdin().read_line(&mut input).expect("Failed to read line");
+                        col_char = input.trim().parse::<char>().unwrap();
+                        col = self.char_convert(col_char);
+                        if col < 1 || row > 10
+                        {
+                            println!("Invalid input");
+                        }
+                        else if col + i > 10 && !vertical
+                        {
+                            println!("Ship cannot go there")
+                        }
+                        else
+                        {
+                            correct_input = true;
+                        }
                     }
-                    else
+
+                    if n == 1
                     {
-                        correct_input = true;
+                        for k in 0..=i
+                        {
+                            if vertical
+                            {
+                                if self.player_one.ship_index_at((row as u8 - 1 + k as u8, col as u8 - 1)) == None
+                                {
+                                    ship_conflict = false;
+                                }
+                                else
+                                {
+                                    println!("There is already a ship there");
+                                    ship_conflict = true;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                if self.player_one.ship_index_at((row as u8 - 1, col as u8 - 1 + k as u8)) == None
+                                {
+                                    ship_conflict = false;
+                                }
+                                else
+                                {
+                                    println!("There is already a ship there");
+                                    ship_conflict = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else 
+                    {
+                        for k in 0..=i
+                        {
+                            if vertical
+                            {
+                                if self.player_two.ship_index_at((row as u8 - 1 + k as u8, col as u8 - 1)) == None
+                                {
+                                    ship_conflict = false;
+                                }
+                                else
+                                {
+                                    println!("There is already a ship there");
+                                    ship_conflict = true;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                if self.player_two.ship_index_at((row as u8 - 1, col as u8 - 1 + k as u8)) == None
+                                {
+                                    ship_conflict = false;
+                                }
+                                else
+                                {
+                                    println!("There is already a ship there");
+                                    ship_conflict = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if !ship_conflict
+                    {
+                        // Place a ship
+                        if n == 1
+                        {
+                            self.player_one.place_ship((row as u8 - 1, col as u8 - 1), !vertical);
+                        }
+                        else 
+                        {
+                            self.player_two.place_ship((row as u8 - 1, col as u8 - 1), !vertical);
+                        }
+                        print!("{esc}c", esc = 27 as char);
                     }
                 }
-                
-                // Place a ship
-                if n == 1
-                {
-                    self.player_one.place_ship((row as u8 - 1, col as u8 - 1), !vertical);
-                }
-                else 
-                {
-                    self.player_two.place_ship((row as u8 - 1, col as u8 - 1), !vertical);
-                }
-                print!("{esc}c", esc = 27 as char);
             }
         }
     }
