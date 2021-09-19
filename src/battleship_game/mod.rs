@@ -143,7 +143,7 @@ pub struct BattleShipGame
     ship_count: usize,
 }
 
-#[allow(dead_code, unused_variables, unused_mut, unused_parens, unused_assignments)]
+#[allow(dead_code, unused_variables, unused_mut, unused_parens, unused_assignments, unused_must_use)]
 impl BattleShipGame
 {
     pub fn init_game(ship_count: usize) -> BattleShipGame
@@ -491,6 +491,18 @@ impl BattleShipGame
         {
             let mut correct_input = false;
             print!("{esc}c", esc = 27 as char);
+            if self.is_player_one_turn
+            {
+                println!("Please swap to player one");
+            }
+            else
+            {
+                println!("Please swap to player two");
+            }
+            println!("Press enter when ready");
+            let mut garbage = String::new();
+            io::stdin().read_line(&mut garbage);
+
             println!("Your ships:");
 
             // Every day we stray further from God's light
@@ -520,6 +532,7 @@ impl BattleShipGame
             {
                 let mut row = 0;
                 let mut col = 0;
+                let mut col_char: char;
                 let mut input = String::new();
                 println!("Time to make an attack!");
 
@@ -533,7 +546,8 @@ impl BattleShipGame
 
                 println!("Choose a column:");
                 io::stdin().read_line(&mut input).expect("Failed to read line");
-                col = input.trim().parse::<usize>().unwrap();
+                col_char = input.trim().parse::<char>().unwrap();
+                col = self.char_convert(col_char);
 
                 // Do you feel it now Mr. Krabs???
                 if row < 1 || row > 9 || col < 1 || col > 10
