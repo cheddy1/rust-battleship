@@ -331,11 +331,41 @@ impl BattleShipGame
         }
     }
 
+    // This is a surprise tool that will help us later
+    pub fn char_convert(&self, x: char) -> usize
+    {
+        match x
+        {
+            'A' => return 1,
+            'B' => return 2,
+            'C' => return 3,
+            'D' => return 4,
+            'E' => return 5,
+            'F' => return 6,
+            'G' => return 7,
+            'H' => return 8,
+            'I' => return 9,
+            'J' => return 10,
+            'a' => return 1,
+            'b' => return 2,
+            'c' => return 3,
+            'd' => return 4,
+            'e' => return 5,
+            'f' => return 6,
+            'g' => return 7,
+            'h' => return 8,
+            'i' => return 9,
+            'j' => return 10,
+            _ => return 0,
+        }
+    }
+
     // Time to make the game actually play
     // TODO: Document
     pub fn place_ships(&mut self)
     {
         let mut row: usize;
+        let mut col_char: char;
         let mut col: usize;
         let mut vertical = true;
 
@@ -423,7 +453,8 @@ impl BattleShipGame
                     let mut input = String::new();
                     println!("Choose a column to start ship {} at", i+1);
                     io::stdin().read_line(&mut input).expect("Failed to read line");
-                    col = input.trim().parse::<usize>().unwrap();
+                    col_char = input.trim().parse::<char>().unwrap();
+                    col = self.char_convert(col_char);
                     if col < 1 || row > 10
                     {
                         println!("Invalid input");
