@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Send a signal to a window pointer from event_dispatch. Returns true if the event was handled. Returns false if the event was not handled or ignored."><meta name="keywords" content="rust, rustlang, rust-lang, handle_raw"><title>handle_raw in fltk::app - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg"><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../fltk/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><h2 class="location">Other items in<br><a href="../index.html">fltk</a>::<wbr><a href="index.html">app</a></h2><div id="sidebar-vars" data-name="handle_raw" data-ty="fn" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input"name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Function <a href="../index.html">fltk</a>::<wbr><a href="index.html">app</a>::<wbr><a class="fn" href="#">handle_raw</a><button id="copy-path" onclick="copy_path(this)" title="copy path"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item import" title="Copy item import to clipboard"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/fltk/app/event.rs.html#302-304" title="goto source code">[src]</a></span></h1><pre class="rust fn">pub unsafe fn handle_raw(event: <a class="struct" href="../enums/struct.Event.html" title="struct fltk::enums::Event">Event</a>, w: <a class="type" href="type.WindowPtr.html" title="type fltk::app::WindowPtr">WindowPtr</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.55.0/std/primitive.bool.html">bool</a></pre><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Send a signal to a window pointer from event_dispatch.
+Returns true if the event was handled.
+Returns false if the event was not handled or ignored.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">fltk</span>::{<span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+<span class="kw">const</span> <span class="ident">CHANGE_FRAME</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="number">100</span>;
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wind</span> <span class="op">=</span> <span class="ident">window::Window::default</span>();
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">but</span> <span class="op">=</span> <span class="ident">button::Button::default</span>();
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">frame</span> <span class="op">=</span> <span class="ident">frame::Frame::default</span>();
+<span class="ident">wind</span>.<span class="ident">end</span>();
+<span class="ident">wind</span>.<span class="ident">show</span>();
+<span class="ident">but</span>.<span class="ident">set_callback</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
+    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">app::handle_main</span>(<span class="ident">CHANGE_FRAME</span>).<span class="ident">unwrap</span>();
+});
+
+<span class="ident">frame</span>.<span class="ident">handle</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">f</span>, <span class="ident">ev</span><span class="op">|</span> {
+    <span class="kw">if</span> <span class="ident">ev</span> <span class="op">=</span><span class="op">=</span> <span class="ident">CHANGE_FRAME</span>.<span class="ident">into</span>() {
+        <span class="ident">f</span>.<span class="ident">set_label</span>(<span class="string">&quot;Hello world&quot;</span>);
+        <span class="bool-val">true</span>
+    } <span class="kw">else</span> {
+        <span class="bool-val">false</span>
+    }
+});
+<span class="kw">unsafe</span> {
+    <span class="ident">app::event_dispatch</span>(<span class="op">|</span><span class="ident">ev</span>, <span class="ident">winptr</span><span class="op">|</span> {
+        <span class="kw">if</span> <span class="ident">ev</span> <span class="op">=</span><span class="op">=</span> <span class="ident">CHANGE_FRAME</span>.<span class="ident">into</span>() {
+            <span class="bool-val">false</span> <span class="comment">// ignore CHANGE_FRAME event</span>
+        } <span class="kw">else</span> {
+            <span class="ident">app::handle_raw</span>(<span class="ident">ev</span>, <span class="ident">winptr</span>)
+        }
+    });
+}</pre></div>
+<h1 id="safety" class="section-header"><a href="#safety">Safety</a></h1>
+<p>The window pointer must be valid</p>
+</div></details></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="fltk" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
+    <script src="../../main.js"></script>
+</body></html>

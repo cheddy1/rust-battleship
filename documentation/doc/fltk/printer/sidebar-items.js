@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Printer","Defines a printer object. Example usage:"]]});

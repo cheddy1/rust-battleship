@@ -1,0 +1,13 @@
+var N = null;var sourcesIndex = {};
+sourcesIndex["bitflags"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["fltk"] = {"name":"","dirs":[{"name":"app","files":["channel.rs","event.rs","font.rs","init.rs","mod.rs","rt.rs","screen.rs","version.rs","visual.rs","widget.rs"]}],"files":["browser.rs","button.rs","dialog.rs","draw.rs","enums.rs","frame.rs","group.rs","image.rs","input.rs","lib.rs","menu.rs","misc.rs","output.rs","prelude.rs","printer.rs","surface.rs","table.rs","text.rs","tree.rs","utils.rs","valuator.rs","widget.rs","window.rs"]};
+sourcesIndex["fltk_derive"] = {"name":"","files":["browser.rs","button.rs","display.rs","group.rs","image.rs","input.rs","lib.rs","menu.rs","table.rs","utils.rs","valuator.rs","widget.rs","window.rs"]};
+sourcesIndex["fltk_sys"] = {"name":"","files":["browser.rs","button.rs","dialog.rs","draw.rs","fl.rs","frame.rs","group.rs","image.rs","input.rs","lib.rs","menu.rs","misc.rs","printer.rs","surface.rs","table.rs","text.rs","tree.rs","utils.rs","valuator.rs","widget.rs","window.rs"]};
+sourcesIndex["libc"] = {"name":"","dirs":[{"name":"unix","dirs":[{"name":"bsd","dirs":[{"name":"apple","dirs":[{"name":"b64","dirs":[{"name":"x86_64","files":["align.rs","mod.rs"]}],"files":["mod.rs"]}],"files":["mod.rs"]}],"files":["mod.rs"]}],"files":["align.rs","mod.rs"]}],"files":["fixed_width_ints.rs","lib.rs","macros.rs"]};
+sourcesIndex["proc_macro2"] = {"name":"","files":["detection.rs","fallback.rs","lib.rs","marker.rs","parse.rs","wrapper.rs"]};
+sourcesIndex["quote"] = {"name":"","files":["ext.rs","format.rs","ident_fragment.rs","lib.rs","runtime.rs","spanned.rs","to_tokens.rs"]};
+sourcesIndex["raw_window_handle"] = {"name":"","files":["lib.rs","macos.rs"]};
+sourcesIndex["rust_battleship"] = {"name":"","dirs":[{"name":"battleship_game","files":["data_structures.rs","mod.rs","player.rs","ship.rs"]}],"files":["main.rs"]};
+sourcesIndex["syn"] = {"name":"","dirs":[{"name":"gen","files":["clone.rs","gen_helper.rs"]}],"files":["attr.rs","await.rs","bigint.rs","buffer.rs","custom_keyword.rs","custom_punctuation.rs","data.rs","derive.rs","discouraged.rs","error.rs","export.rs","expr.rs","ext.rs","generics.rs","group.rs","ident.rs","lib.rs","lifetime.rs","lit.rs","lookahead.rs","mac.rs","macros.rs","op.rs","parse.rs","parse_macro_input.rs","parse_quote.rs","path.rs","print.rs","punctuated.rs","sealed.rs","span.rs","spanned.rs","thread.rs","token.rs","ty.rs","verbatim.rs"]};
+sourcesIndex["unicode_xid"] = {"name":"","files":["lib.rs","tables.rs"]};
+createSourceSidebar();

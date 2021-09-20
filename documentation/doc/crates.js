@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["bitflags","fltk","fltk_derive","fltk_sys","libc","proc_macro2","quote","raw_window_handle","rust_battleship","syn","unicode_xid"];

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Player","This is the struct that contains the data for each indiviual player"]]});
