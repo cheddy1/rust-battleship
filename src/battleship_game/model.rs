@@ -22,4 +22,5 @@ impl<'a> Model<'a>
             game_boat_state: BoatState::Placed,
         }
     }
+
 }

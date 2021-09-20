@@ -45,7 +45,7 @@ struct Board
 
 impl Board
 {
-    pub fn new(x: i32, y: i32, model: Rc<RefCell<Model>>) -> Self
+    pub fn new<'a>(x: i32, y: i32, model: &'a Rc<RefCell<Model>>) -> Self
     {
         // The constructor of Board is where we arrange all of the
         // coordinate labels and squares.
@@ -151,10 +151,8 @@ impl Board
 // viewed as an alternative to subclassing.
 widget_extends!(Board, Group, grp);
 
-pub fn init_game()
+pub fn init_game(model: Rc<RefCell<Model>>)
 {
-    // init model
-    let model = Rc::new(RefCell::new(Model::new()));
     
     // I dont know where to put this window creation logic, so it can live in init_game for now.
     let app = app::App::default();
@@ -165,7 +163,6 @@ pub fn init_game()
     //let mut p2_button_ary = [[Button::default(); 9]; 10];
 
     // TODO: Move to separate module
-
     let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET, Rc::clone(&model));
     let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET, Rc::clone(&model));
 
