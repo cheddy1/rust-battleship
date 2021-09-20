@@ -45,7 +45,7 @@ struct Board
 
 impl Board
 {
-    pub fn new<'a>(x: i32, y: i32, model: &'a Rc<RefCell<Model>>) -> Self
+    pub fn new(x: i32, y: i32, model: &Rc<RefCell<Model>>) -> Self
     {
         // The constructor of Board is where we arrange all of the
         // coordinate labels and squares.
@@ -122,7 +122,7 @@ impl Board
             let mut dummy_ship = &ships[n];
             dummy_ship.set_frame(FrameType::OvalBox);
             dummy_ship.set_color(Color::from_u32(0xE9ECF0));
-            let m = Rc::clone(&model);
+            let m = Rc::clone(model);
             dummy_ship.set_callback(move |_| {
                 let m = *m.borrow_mut();
                 match m.game_boat_state
@@ -151,7 +151,7 @@ impl Board
 // viewed as an alternative to subclassing.
 widget_extends!(Board, Group, grp);
 
-pub fn init_game(model: Rc<RefCell<Model>>)
+pub fn init_game(model: &Rc<RefCell<Model>>)
 {
     
     // I dont know where to put this window creation logic, so it can live in init_game for now.
@@ -163,8 +163,8 @@ pub fn init_game(model: Rc<RefCell<Model>>)
     //let mut p2_button_ary = [[Button::default(); 9]; 10];
 
     // TODO: Move to separate module
-    let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET, Rc::clone(&model));
-    let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET, Rc::clone(&model));
+    let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET, model);
+    let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET, model);
 
 
     // This is a concept of drawing a box to the screen. We can keep it for now as a backup.
