@@ -599,11 +599,11 @@ impl BattleShipGame
             if self.is_player_one_turn
             {
                 self.player_one.print_board(true);
-                if !self.player_one.printed_s_check()
-                {
-                    println!("player 2 wins!");
-                    break;
-                }
+                //if !self.player_one.printed_s_check()
+                //{
+                //    println!("player 2 wins!");
+                //    break;
+                //}
             }
             else
             {
