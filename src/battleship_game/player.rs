@@ -16,6 +16,9 @@ pub struct Player
     /// The signature of the player, mostly used to let the front end know which player achieved a
     /// victory
     player_signature: Players, 
+
+    /// This will be used to detect if an S is printed
+    printed_s: bool,
 }
 
 #[allow(dead_code, unused_variables, unused_mut)]
@@ -38,6 +41,8 @@ impl Player
             
             // The signature of the player, mostly for checking the player's turn
             player_signature: player_sig, 
+
+            printed_s: true,
        }
     }
 
@@ -191,14 +196,21 @@ impl Player
         }
     }
 
+    /// returns variable
+    pub fn printed_s_check(&self) -> bool
+    {
+        return self.printed_s;
+    }
+
     /// This function prints the player's board.
     /// If the bool passed in is true, it will print where the player's ships are.
     /// If false, it will only print hit locations.
-    pub fn print_board(&self, is_turn: bool)
+    pub fn print_board(&mut self, is_turn: bool)
     {
         print!("["); // Start the array in the print
 
         // Iterate through the matrix to print it
+        let mut ship = false;
         for i in 0..=BOARD_HEIGHT
         {
             for j in 0..=BOARD_WIDTH
@@ -217,6 +229,8 @@ impl Player
                     print!(" ");
                 }
                 // Match statement to show if the square is either empty or has been hit
+                // im so sorry
+                
                 if i != 0 && j != 0
                 {
                     let to_print = match self.board_matrix[i-1][j-1]
@@ -224,17 +238,21 @@ impl Player
                         WaterSquare::Empty => if is_turn && self.is_ship(j-1,i-1) {'S'} else {' '},
                         WaterSquare::Hit => 'x',
                     };
+                    if self.board_matrix[i-1][j-1] == WaterSquare::Empty && is_turn && self.is_ship(i-1, j-1)
+                    {
+                        ship = true;
+                    }
                     // Print the value
                     print!(" {}", to_print);
                 }
-
-                
 
                 if i != (BOARD_HEIGHT) || j != (BOARD_WIDTH)
                 {
                     // Add a comma if it's not the very last value
                     print!(", ");
                 }
+
+                self.printed_s = ship;
             }
 
             // Print a new line as long as it's not the last line

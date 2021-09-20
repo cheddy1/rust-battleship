@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Frame","Creates a new frame, an equivalent of `Fl_Box`"]]});

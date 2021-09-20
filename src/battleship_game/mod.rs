@@ -599,10 +599,20 @@ impl BattleShipGame
             if self.is_player_one_turn
             {
                 self.player_one.print_board(true);
+                if !self.player_one.printed_s_check()
+                {
+                    println!("player 2 wins!");
+                    break;
+                }
             }
             else
             {
                 self.player_two.print_board(true);
+                if !self.player_two.printed_s_check()
+                {
+                    println!("player 1 wins!");
+                    break;
+                }
             }
             println!("Your opponent's board so far:");
             if self.is_player_one_turn
@@ -651,29 +661,7 @@ impl BattleShipGame
                     self.take_turn((col as u8 - 1, row as u8 - 1));
                 }
             }
-            if self.check_victory()
-            {
-                // It's done
-                // The game's finally over
-                game_over = true;
-
-                print!("{esc}c", esc = 27 as char);
-                println!("Player one's final board:");
-                self.player_one.print_board(true);
-                println!("Player two's final board:");
-                self.player_two.print_board(true);
-
-                // This flips before checking the win, so whoever's turn it is
-                // is the loser
-                if self.is_player_one_turn
-                {
-                    println!("Congratulations player 2!");
-                }
-                else
-                {
-                    println!("Congratulations player 1!");
-                }
-            }
+            
         }
     }
 }
@@ -683,7 +671,7 @@ impl BattleShipGame
 impl BattleShipGame
 {
     //Prints player 1 board
-    pub fn print_p1_board(&self)
+    pub fn print_p1_board(&mut self)
     {
         self.player_one.print_board(false);
     }

@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["OutputType","Sets the input widget’s type"]],"struct":[["MultilineOutput","Creates a multiline-output widget"],["Output","Creates an output widget"]]});

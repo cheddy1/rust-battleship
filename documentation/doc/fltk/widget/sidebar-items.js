@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Widget","An abstract type, shouldn’t be instantiated in user code"]]});

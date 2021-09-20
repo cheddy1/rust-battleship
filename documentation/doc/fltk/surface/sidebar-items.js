@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["ImageSurface","An image surface object. Example usage:"],["SvgFileSurface","An SVG image surface object which allows drawing to an svg file Example usage:"]]});

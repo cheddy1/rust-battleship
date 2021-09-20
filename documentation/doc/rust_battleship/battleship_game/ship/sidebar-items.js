@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Ship","This is the struct that contains the data for a Ship on the board"]]});

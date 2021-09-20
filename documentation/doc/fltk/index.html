@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="fltk-rs"><meta name="keywords" content="rust, rustlang, rust-lang, fltk"><title>fltk - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../favicon.svg"><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../fltk/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate fltk</h2><div class="block version"><div class="narrow-helper"></div><p>Version 1.1.18</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all fltk's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li></ul></div><div id="sidebar-vars" data-name="fltk" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input"name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">fltk</a><button id="copy-path" onclick="copy_path(this)" title="copy path"><img src="../clipboard.svg" width="19" height="18" alt="Copy item import" title="Copy item import to clipboard"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/fltk/lib.rs.html#1-323" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h1 id="fltk-rs" class="section-header"><a href="#fltk-rs">fltk-rs</a></h1>
+<p><a href="https://docs.rs/fltk"><img src="https://docs.rs/fltk/badge.svg" alt="Documentation" /></a>
+<a href="https://crates.io/crates/fltk"><img src="https://img.shields.io/crates/v/fltk.svg" alt="Crates.io" /></a>
+<a href="https://github.com/fltk-rs/fltk-rs/blob/master/LICENSE"><img src="https://img.shields.io/crates/l/fltk.svg" alt="License" /></a>
+<a href="https://github.com/fltk-rs/fltk-rs/actions"><img src="https://github.com/fltk-rs/fltk-rs/workflows/Build/badge.svg?branch=master" alt="Build" /></a></p>
+<p>Rust bindings for the FLTK Graphical User Interface library.</p>
+<p>The fltk crate is a crossplatform lightweight gui library which can be statically linked to produce small, self-contained (no dependencies) and fast gui applications.</p>
+<p>Why choose FLTK?</p>
+<ul>
+<li>Lightweight. Small binary, around 1mb after stripping. <a href="https://szibele.com/memory-footprint-of-gui-toolkits/">Small memory footprint</a>.</li>
+<li>Speed. Fast to install, fast to build, fast at startup and fast at runtime.</li>
+<li>Single executable. No DLLs to deploy.</li>
+<li>Supports old architectures.</li>
+<li>FLTK’s permissive license which allows static linking for closed-source applications.</li>
+<li>Themability (4 supported schemes: Base, GTK, Plastic and Gleam), and additional theming using <a href="https://crates.io/crates/fltk-theme">fltk-theme</a>.</li>
+<li>Provides around 80 customizable widgets.</li>
+<li>Has inbuilt image support.</li>
+</ul>
+<p>Tutorials:</p>
+<ul>
+<li><a href="https://github.com/fltk-rs/fltk-rs#tutorials">Video</a></li>
+<li><a href="https://github.com/fltk-rs/fltk-rs/wiki">Written</a></li>
+<li><a href="https://github.com/fltk-rs/fltk-rs/discussions">Discussions</a></li>
+<li><a href="https://github.com/fltk-rs/demos">Demos</a></li>
+<li><a href="https://github.com/tdryer/7guis-fltk-rs">7guis-fltk-rs</a></li>
+<li><a href="https://github.com/wyhinton/FLTK-RS-Examples">FLTK-RS-Examples</a></li>
+<li>Erco’s FLTK cheat <a href="http://seriss.com/people/erco/fltk/">page</a>, which is an excellent FLTK C++ reference.</li>
+</ul>
+<p>Here is a <a href="https://en.wikipedia.org/wiki/FLTK#Use">list</a> of software using FLTK. For software using fltk-rs, check <a href="https://github.com/fltk-rs/fltk-rs/issues/418">here</a>.</p>
+<ul>
+<li><a href="https://github.com/fltk/fltk">Link</a> to the official FLTK repository.</li>
+<li><a href="https://www.fltk.org/doc-1.3/index.html">Link</a> to the official documentation.</li>
+</ul>
+<h2 id="usage" class="section-header"><a href="#usage">Usage</a></h2>
+<p>Just add the following to your project’s Cargo.toml file:</p>
+<div class="example-wrap"><pre class="language-toml">[dependencies]
+fltk = &quot;^1.1&quot;</pre></div>
+<p>To use the latest changes in the repo:</p>
+<div class="example-wrap"><pre class="language-toml">[dependencies]
+fltk = { version = &quot;^1.1&quot;, git = &quot;https://github.com/fltk-rs/fltk-rs&quot; }</pre></div>
+<p>To use the bundled libs (available for x64 windows (msvc &amp; gnu (msys2)), x64 linux &amp; macos):</p>
+<div class="example-wrap"><pre class="language-toml">[dependencies]
+fltk = { version = &quot;^1.1&quot;, features = [&quot;fltk-bundled&quot;] }</pre></div>
+<p>The library is automatically built and statically linked to your binary.</p>
+<p>For faster builds you can enable ninja builds for the C++ source using the “use-ninja” feature.</p>
+<p>An example hello world application:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">fltk</span>::{<span class="ident">app</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">window::Window</span>};
+<span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">app::App::default</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wind</span> <span class="op">=</span> <span class="ident">Window::new</span>(<span class="number">100</span>, <span class="number">100</span>, <span class="number">400</span>, <span class="number">300</span>, <span class="string">&quot;Hello from rust&quot;</span>);
+    <span class="ident">wind</span>.<span class="ident">end</span>();
+    <span class="ident">wind</span>.<span class="ident">show</span>();
+    <span class="ident">app</span>.<span class="ident">run</span>().<span class="ident">unwrap</span>();
+}</pre></div>
+<p>Another example showing the basic callback functionality:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">fltk</span>::{<span class="ident">app</span>, <span class="ident">button::Button</span>, <span class="ident">frame::Frame</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">window::Window</span>};
+<span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">app::App::default</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wind</span> <span class="op">=</span> <span class="ident">Window::new</span>(<span class="number">100</span>, <span class="number">100</span>, <span class="number">400</span>, <span class="number">300</span>, <span class="string">&quot;Hello from rust&quot;</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">frame</span> <span class="op">=</span> <span class="ident">Frame::new</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">400</span>, <span class="number">200</span>, <span class="string">&quot;&quot;</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">but</span> <span class="op">=</span> <span class="ident">Button::new</span>(<span class="number">160</span>, <span class="number">210</span>, <span class="number">80</span>, <span class="number">40</span>, <span class="string">&quot;Click me!&quot;</span>);
+    <span class="ident">wind</span>.<span class="ident">end</span>();
+    <span class="ident">wind</span>.<span class="ident">show</span>();
+    <span class="ident">but</span>.<span class="ident">set_callback</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">frame</span>.<span class="ident">set_label</span>(<span class="string">&quot;Hello World!&quot;</span>)); <span class="comment">// the closure capture is mutable borrow to our button</span>
+    <span class="ident">app</span>.<span class="ident">run</span>().<span class="ident">unwrap</span>();
+}</pre></div>
+<p>Please check the examples directory for more examples.
+You will notice that all widgets are instantiated with a new() method, taking the x and y coordinates, the width and height of the widget, as well as a label which can be left blank if needed. Another way to initialize a widget is using the builder pattern: (The following buttons are equivalent)</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">fltk</span>::{<span class="ident">button::Button</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>};
+<span class="kw">let</span> <span class="ident">but1</span> <span class="op">=</span> <span class="ident">Button::new</span>(<span class="number">10</span>, <span class="number">10</span>, <span class="number">80</span>, <span class="number">40</span>, <span class="string">&quot;Button 1&quot;</span>);
+
+<span class="kw">let</span> <span class="ident">but2</span> <span class="op">=</span> <span class="ident">Button::default</span>()
+    .<span class="ident">with_pos</span>(<span class="number">10</span>, <span class="number">10</span>)
+    .<span class="ident">with_size</span>(<span class="number">80</span>, <span class="number">40</span>)
+    .<span class="ident">with_label</span>(<span class="string">&quot;Button 2&quot;</span>);</pre></div>
+<p>An example of a counter showing use of the builder pattern:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">fltk</span>::{<span class="ident">app</span>, <span class="ident">button::Button</span>, <span class="ident">frame::Frame</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">window::Window</span>};
+<span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">app::App::default</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wind</span> <span class="op">=</span> <span class="ident">Window::default</span>()
+        .<span class="ident">with_size</span>(<span class="number">160</span>, <span class="number">200</span>)
+        .<span class="ident">center_screen</span>()
+        .<span class="ident">with_label</span>(<span class="string">&quot;Counter&quot;</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">frame</span> <span class="op">=</span> <span class="ident">Frame::default</span>()
+        .<span class="ident">with_size</span>(<span class="number">100</span>, <span class="number">40</span>)
+        .<span class="ident">center_of</span>(<span class="kw-2">&amp;</span><span class="ident">wind</span>)
+        .<span class="ident">with_label</span>(<span class="string">&quot;0&quot;</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">but_inc</span> <span class="op">=</span> <span class="ident">Button::default</span>()
+        .<span class="ident">size_of</span>(<span class="kw-2">&amp;</span><span class="ident">frame</span>)
+        .<span class="ident">above_of</span>(<span class="kw-2">&amp;</span><span class="ident">frame</span>, <span class="number">0</span>)
+        .<span class="ident">with_label</span>(<span class="string">&quot;+&quot;</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">but_dec</span> <span class="op">=</span> <span class="ident">Button::default</span>()
+        .<span class="ident">size_of</span>(<span class="kw-2">&amp;</span><span class="ident">frame</span>)
+        .<span class="ident">below_of</span>(<span class="kw-2">&amp;</span><span class="ident">frame</span>, <span class="number">0</span>)
+        .<span class="ident">with_label</span>(<span class="string">&quot;-&quot;</span>);
+    <span class="ident">wind</span>.<span class="ident">make_resizable</span>(<span class="bool-val">true</span>);
+    <span class="ident">wind</span>.<span class="ident">end</span>();
+    <span class="ident">wind</span>.<span class="ident">show</span>();
+    <span class="comment">/* Event handling */</span>
+    <span class="ident">app</span>.<span class="ident">run</span>().<span class="ident">unwrap</span>();
+}</pre></div>
+<p>Alternatively, you can use packs, columns, rows to layout your widgets (or the <a href="https://github.com/fltk-rs/fltk-flex">fltk-flex crate</a> for flexbox layouts):</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">fltk</span>::{<span class="ident">app</span>, <span class="ident">button::Button</span>, <span class="ident">frame::Frame</span>, <span class="ident">group::Pack</span>, <span class="ident">prelude</span>::<span class="kw-2">*</span>, <span class="ident">window::Window</span>};
+<span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">app::App::default</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">wind</span> <span class="op">=</span> <span class="ident">Window::default</span>().<span class="ident">with_size</span>(<span class="number">160</span>, <span class="number">200</span>).<span class="ident">with_label</span>(<span class="string">&quot;Counter&quot;</span>);
+    <span class="comment">// Vertical is default. You can choose horizontal using pack.set_type(PackType::Horizontal);</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pack</span> <span class="op">=</span> <span class="ident">Pack::default</span>().<span class="ident">with_size</span>(<span class="number">120</span>, <span class="number">140</span>).<span class="ident">center_of</span>(<span class="kw-2">&amp;</span><span class="ident">wind</span>);
+    <span class="ident">pack</span>.<span class="ident">set_spacing</span>(<span class="number">10</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">but_inc</span> <span class="op">=</span> <span class="ident">Button::default</span>().<span class="ident">with_size</span>(<span class="number">0</span>, <span class="number">40</span>).<span class="ident">with_label</span>(<span class="string">&quot;+&quot;</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">frame</span> <span class="op">=</span> <span class="ident">Frame::default</span>().<span class="ident">with_size</span>(<span class="number">0</span>, <span class="number">40</span>).<span class="ident">with_label</span>(<span class="string">&quot;0&quot;</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">but_dec</span> <span class="op">=</span> <span class="ident">Button::default</span>().<span class="ident">with_size</span>(<span class="number">0</span>, <span class="number">40</span>).<span class="ident">with_label</span>(<span class="string">&quot;-&quot;</span>);
+    <span class="ident">pack</span>.<span class="ident">end</span>();
+    <span class="ident">wind</span>.<span class="ident">end</span>();
+    <span class="ident">wind</span>.<span class="ident">show</span>();
+    <span class="ident">app</span>.<span class="ident">run</span>().<span class="ident">unwrap</span>();
+}</pre></div>
+<h3 id="events" class="section-header"><a href="#events">Events</a></h3>
+<p>Events can be handled using the <code>set_callback</code> method (as above) or the available <code>fltk::app::set_callback()</code> free function, which will handle the default trigger of each widget(like clicks for buttons):</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+    <span class="comment">/* previous hello world code */</span>
+    <span class="ident">but</span>.<span class="ident">set_callback</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">frame</span>.<span class="ident">set_label</span>(<span class="string">&quot;Hello World!&quot;</span>));
+    <span class="ident">another_but</span>.<span class="ident">set_callback</span>(<span class="op">|</span><span class="ident">this_button</span><span class="op">|</span> <span class="ident">this_button</span>.<span class="ident">set_label</span>(<span class="string">&quot;Works&quot;</span>));
+    <span class="ident">app</span>.<span class="ident">run</span>().<span class="ident">unwrap</span>();</pre></div>
+<p>Another way is to use message passing:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+    <span class="comment">/* previous counter code */</span>
+    <span class="kw">let</span> (<span class="ident">s</span>, <span class="ident">r</span>) <span class="op">=</span> <span class="ident">app::channel</span>::<span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span>();
+
+    <span class="ident">but_inc</span>.<span class="ident">emit</span>(<span class="ident">s</span>, <span class="ident">Message::Increment</span>);
+    <span class="ident">but_dec</span>.<span class="ident">emit</span>(<span class="ident">s</span>, <span class="ident">Message::Decrement</span>);
+
+    <span class="kw">while</span> <span class="ident">app</span>.<span class="ident">wait</span>() {
+        <span class="kw">let</span> <span class="ident">label</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="ident">frame</span>.<span class="ident">label</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">msg</span>) <span class="op">=</span> <span class="ident">r</span>.<span class="ident">recv</span>() {
+            <span class="kw">match</span> <span class="ident">msg</span> {
+                <span class="ident">Message::Increment</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">frame</span>.<span class="ident">set_label</span>(<span class="kw-2">&amp;</span>(<span class="ident">label</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">to_string</span>()),
+                <span class="ident">Message::Decrement</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">frame</span>.<span class="ident">set_label</span>(<span class="kw-2">&amp;</span>(<span class="ident">label</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">to_string</span>()),
+            }
+        }
+    }</pre></div>
+<p>For the remainder of the code, check the full example <a href="https://github.com/fltk-rs/fltk-rs/blob/master/fltk/examples/counter2.rs">here</a>.</p>
+<p>For custom event handling, the handle() method can be used:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+    <span class="ident">some_widget</span>.<span class="ident">handle</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">widget</span>, <span class="ident">ev</span>: <span class="ident">Event</span><span class="op">|</span> {
+        <span class="kw">match</span> <span class="ident">ev</span> {
+            <span class="ident">Event::Push</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="macro">println!</span>(<span class="string">&quot;Pushed!&quot;</span>);
+                <span class="bool-val">true</span>
+            },
+            <span class="comment">/* other events to be handled */</span>
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+        }
+    });</pre></div>
+<p>Handled or ignored events using the handle method should return true, unhandled events should return false.
+More examples are available in the examples directory.</p>
+<h3 id="theming" class="section-header"><a href="#theming">Theming</a></h3>
+<p>FLTK offers 4 application schemes:</p>
+<ul>
+<li>Base</li>
+<li>Gtk</li>
+<li>Gleam</li>
+<li>Plastic</li>
+</ul>
+<p>(Additional theming can be found in the <a href="https://crates.io/crates/fltk-theme">fltk-theme</a> crate)</p>
+<p>These can be set using the <code>App::with_scheme()</code> function.</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+<span class="kw">let</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">app::App::default</span>().<span class="ident">with_scheme</span>(<span class="ident">app::Scheme::Gleam</span>);</pre></div>
+<p>Themes of individual widgets can be optionally modified using the provided methods in the <code>WidgetExt</code> trait,
+such as <code>set_color()</code>, <code>set_label_font()</code>, <code>set_frame()</code> etc:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+    <span class="ident">some_button</span>.<span class="ident">set_color</span>(<span class="ident">Color::Light1</span>); <span class="doccomment">//! You can use one of the provided colors in the fltk enums</span>
+    <span class="ident">some_button</span>.<span class="ident">set_color</span>(<span class="ident">Color::from_rgb</span>(<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>)); <span class="doccomment">//! Or you can specify a color by rgb or hex/u32 value</span>
+    <span class="ident">some_button</span>.<span class="ident">set_color</span>(<span class="ident">Color::from_u32</span>(<span class="number">0xffebee</span>));
+    <span class="ident">some_button</span>.<span class="ident">set_frame</span>(<span class="ident">FrameType::RoundUpBox</span>);
+    <span class="ident">some_button</span>.<span class="ident">set_font</span>(<span class="ident">Font::TimesItalic</span>);</pre></div>
+<p>For default application colors, fltk-rs provides <code>app::background()</code>, <code>app::background2()</code> and <code>app::foreground()</code>. You can also specify the default application selection/inactive colors, font, label size, frame type, scrollbar size, menu linespacing. Additionally the <a href="https://crates.io/crates/fltk-theme">fltk-theme</a> crate offers some other predefined color maps (dark theme, tan etc) and widget themes which can be loaded into your application.</p>
+<h2 id="dependencies" class="section-header"><a href="#dependencies">Dependencies</a></h2>
+<p>Rust (version &gt; 1.45), CMake (version &gt; 3.0), Git and a C++11 compiler need to be installed and in your PATH for a crossplatform build from source. This crate also offers a bundled form of fltk on selected platforms, this can be enabled using the fltk-bundled feature flag (which requires curl and tar to download and unpack the bundled libraries).</p>
+<ul>
+<li>Windows: No external dependencies.</li>
+<li>MacOS: No external dependencies.</li>
+<li>Linux/BSD: X11 and OpenGL development headers need to be installed for development. The libraries themselves are available on linux distros with a graphical user interface.</li>
+</ul>
+<p>For Debian-based GUI distributions, that means running:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+$ <span class="ident">sudo</span> <span class="ident">apt</span><span class="op">-</span><span class="ident">get</span> <span class="ident">install</span> <span class="ident">libx11</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libxext</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libxft</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libxinerama</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libxcursor</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libxrender</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libxfixes</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libpango1</span>.<span class="number">0</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libpng</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libgl1</span><span class="op">-</span><span class="ident">mesa</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libglu1</span><span class="op">-</span><span class="ident">mesa</span><span class="op">-</span><span class="ident">dev</span></pre></div>
+<p>For RHEL-based GUI distributions, that means running:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+$ <span class="ident">sudo</span> <span class="ident">yum</span> <span class="ident">groupinstall</span> <span class="string">&quot;X Software Development&quot;</span> <span class="op">&amp;&amp;</span> <span class="ident">yum</span> <span class="ident">install</span> <span class="ident">pango</span><span class="op">-</span><span class="ident">devel</span> <span class="ident">libXinerama</span><span class="op">-</span><span class="ident">devel</span> <span class="ident">libpng</span><span class="op">-</span><span class="ident">devel</span></pre></div>
+<p>For Arch-based GUI distributions, that means running:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+$ <span class="ident">sudo</span> <span class="ident">pacman</span> <span class="op">-</span><span class="ident">S</span> <span class="ident">libx11</span> <span class="ident">libxext</span> <span class="ident">libxft</span> <span class="ident">libxinerama</span> <span class="ident">libxcursor</span> <span class="ident">libxrender</span> <span class="ident">libxfixes</span> <span class="ident">libpng</span> <span class="ident">pango</span> <span class="ident">cairo</span> <span class="ident">libgl</span> <span class="ident">mesa</span> <span class="op">-</span><span class="op">-</span><span class="ident">needed</span></pre></div>
+<p>For Alpine linux:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+$ <span class="ident">apk</span> <span class="ident">add</span> <span class="ident">pango</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">fontconfig</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libxinerama</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libxfixes</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libxcursor</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">libpng</span><span class="op">-</span><span class="ident">dev</span> <span class="ident">mesa</span><span class="op">-</span><span class="ident">gl</span></pre></div>
+<p>For NixOS (Linux distribution) this <code>nix-shell</code> environment can be used:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
+$ <span class="ident">nix</span><span class="op">-</span><span class="ident">shell</span> <span class="op">-</span><span class="op">-</span><span class="ident">packages</span> <span class="ident">rustc</span> <span class="ident">cmake</span> <span class="ident">git</span> <span class="ident">gcc</span> <span class="ident">xorg</span>.<span class="ident">libXext</span> <span class="ident">xorg</span>.<span class="ident">libXft</span> <span class="ident">xorg</span>.<span class="ident">libXinerama</span> <span class="ident">xorg</span>.<span class="ident">libXcursor</span> <span class="ident">xorg</span>.<span class="ident">libXrender</span> <span class="ident">xorg</span>.<span class="ident">libXfixes</span> <span class="ident">libpng</span> <span class="ident">libcerf</span> <span class="ident">pango</span> <span class="ident">cairo</span> <span class="ident">libGL</span> <span class="ident">mesa</span> <span class="ident">pkg</span><span class="op">-</span><span class="ident">config</span></pre></div>
+<h2 id="features" class="section-header"><a href="#features">Features</a></h2>
+<p>The following are the features offered by the crate:</p>
+<ul>
+<li>fltk-bundled: Support for bundled versions of cfltk and fltk on selected platforms (requires curl and tar)</li>
+<li>no-pango: Build without pango support on Linux/BSD.</li>
+<li>enable-glwindow: Support for drawing using OpenGL functions.</li>
+<li>use-ninja:  If you have ninja build installed, it builds faster than make or VS</li>
+<li>system-libpng: Uses the system libpng</li>
+<li>system-libjpeg: Uses the system libjpeg</li>
+<li>system-zlib: Uses the system zlib</li>
+</ul>
+<h2 id="faq" class="section-header"><a href="#faq">FAQ</a></h2>
+<p>please check the <a href="https://github.com/fltk-rs/fltk-rs/blob/master/FAQ.md">FAQ</a> page for frequently asked questions, encountered issues, guides on deployment, and contribution.</p>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="mod" href="app/index.html" title="fltk::app mod">app</a></div><div class="item-right docblock-short"><p>Application related methods and functions</p>
+</div><div class="item-left module-item"><a class="mod" href="browser/index.html" title="fltk::browser mod">browser</a></div><div class="item-right docblock-short"><p>Browser widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="button/index.html" title="fltk::button mod">button</a></div><div class="item-right docblock-short"><p>Button widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="dialog/index.html" title="fltk::dialog mod">dialog</a></div><div class="item-right docblock-short"><p>Dialog widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="draw/index.html" title="fltk::draw mod">draw</a></div><div class="item-right docblock-short"><p>Drawing primitives</p>
+</div><div class="item-left module-item"><a class="mod" href="enums/index.html" title="fltk::enums mod">enums</a></div><div class="item-right docblock-short"><p>Fltk defined enums: Color, Font, <code>CallbackTrigger</code> etc</p>
+</div><div class="item-left module-item"><a class="mod" href="frame/index.html" title="fltk::frame mod">frame</a></div><div class="item-right docblock-short"><p>Basic fltk box/frame widget</p>
+</div><div class="item-left module-item"><a class="mod" href="group/index.html" title="fltk::group mod">group</a></div><div class="item-right docblock-short"><p>Group widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="image/index.html" title="fltk::image mod">image</a></div><div class="item-right docblock-short"><p>Image types supported by fltk</p>
+</div><div class="item-left module-item"><a class="mod" href="input/index.html" title="fltk::input mod">input</a></div><div class="item-right docblock-short"><p>Input widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="menu/index.html" title="fltk::menu mod">menu</a></div><div class="item-right docblock-short"><p>Menu widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="misc/index.html" title="fltk::misc mod">misc</a></div><div class="item-right docblock-short"><p>Miscellaneous widgets not fitting a certain group</p>
+</div><div class="item-left module-item"><a class="mod" href="output/index.html" title="fltk::output mod">output</a></div><div class="item-right docblock-short"><p>Output widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="prelude/index.html" title="fltk::prelude mod">prelude</a></div><div class="item-right docblock-short"><p>All fltk widget traits and flt error types</p>
+</div><div class="item-left module-item"><a class="mod" href="printer/index.html" title="fltk::printer mod">printer</a></div><div class="item-right docblock-short"><p>Printing related functions</p>
+</div><div class="item-left module-item"><a class="mod" href="surface/index.html" title="fltk::surface mod">surface</a></div><div class="item-right docblock-short"><p>Widget surface to image functions</p>
+</div><div class="item-left module-item"><a class="mod" href="table/index.html" title="fltk::table mod">table</a></div><div class="item-right docblock-short"><p>Table widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="text/index.html" title="fltk::text mod">text</a></div><div class="item-right docblock-short"><p>Text display widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="tree/index.html" title="fltk::tree mod">tree</a></div><div class="item-right docblock-short"><p>Tree widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="utils/index.html" title="fltk::utils mod">utils</a></div><div class="item-right docblock-short"><p>General utility functions</p>
+</div><div class="item-left module-item"><a class="mod" href="valuator/index.html" title="fltk::valuator mod">valuator</a></div><div class="item-right docblock-short"><p>Valuator widgets</p>
+</div><div class="item-left module-item"><a class="mod" href="widget/index.html" title="fltk::widget mod">widget</a></div><div class="item-right docblock-short"><p>Basic empty widget</p>
+</div><div class="item-left module-item"><a class="mod" href="window/index.html" title="fltk::window mod">window</a></div><div class="item-right docblock-short"><p>Window widgets</p>
+</div></div><h2 id="macros" class="section-header"><a href="#macros">Macros</a></h2>
+<div class="item-table"><div class="item-left module-item"><a class="macro" href="macro.widget_extends.html" title="fltk::widget_extends macro">widget_extends</a></div><div class="item-right docblock-short"><p>Defines a set of convenience functions for constructing and anchoring custom widgets.
+Usage: fltk::widget_extends!(CustomWidget, BaseWidget, member);
+It basically implements Deref and DerefMut on the custom widget, and adds the aforementioned methods.</p>
+</div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="fltk" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+    <script src="../main.js"></script>
+</body></html>
