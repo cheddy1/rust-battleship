@@ -61,7 +61,7 @@ impl Ship
         // This one liner makes me happy
         // If all board positions that this ship takes up are hit, then we set is_sunk to true
         self.is_sunk = self.ship_position.iter().all(|pos| board[pos.1 as usize][pos.0 as usize] == WaterSquare::Hit);
-
+        
         if self.is_sunk
         {
             // TODO: Remove this debug
