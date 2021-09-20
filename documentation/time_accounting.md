@@ -167,4 +167,14 @@ Jackson:
 
 * Debug meeting: 1hr
 
+## Total
 
+Research: 44 person-hours
+
+Development: 28.5 person-hours
+
+Documentation: 12 person-hours
+
+Debugging: 5 person-hours
+
+Business: 20.5 person-hours
