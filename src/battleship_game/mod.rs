@@ -259,9 +259,8 @@ impl BattleShipGame
 
     // RELEVANT CLI CODE BEGINS BELOW
 
-
-    // This function will execute the turn for the current player, and will return a bool of
-    // whether or not the game has finished
+    /// This function will execute the turn for the current player, and will return a bool of
+    /// whether or not the game has finished
     pub fn take_turn(&mut self, pos: (u8, u8)) -> (FireState, Option<&Players>)
     {
         if self.is_player_one_turn 
@@ -305,11 +304,9 @@ impl BattleShipGame
        }
     }
 
-    // Now we begin a CLI backup plan
-    // Everything beyond here was perhaps rushed and can be
-    // cleaned up if need be
+    // Now we begin a CLI implementation
 
-    // Initialize the game
+    /// This function obtains a ship count from the players and returns a BattleShipGame object
     pub fn begin() -> BattleShipGame
     {
         // Obtain ship count
@@ -341,7 +338,10 @@ impl BattleShipGame
         }
     }
 
-    // This is a surprise tool that will help us later
+    /// This function takes char inputs and returns usize ints.
+    /// It is to be used when the players are providing input for 
+    /// where to place ships or attack, since the chars need to
+    /// be turned into numbers to update game values
     pub fn char_convert(&self, x: char) -> usize
     {
         match x
@@ -370,7 +370,7 @@ impl BattleShipGame
         }
     }
 
-    // Time to make the game actually play
+    /// This function will allow both players to place ships
     pub fn place_ships(&mut self)
     {
         let mut row: usize;
@@ -378,11 +378,10 @@ impl BattleShipGame
         let mut col: usize;
         let mut vertical = true;
 
-        // This line, which will be used again later, clears the terminal
+        // This line clears the terminal
         print!("{esc}c", esc = 27 as char);
         
-        // I apoloogize for this, but it's too late to do this in a prettier way
-        // something something mutable reference
+        // Will run this loop twice, as there are two players
         for n in 1..=2
         {
             if n == 1
@@ -395,6 +394,8 @@ impl BattleShipGame
                 println!("Player 1, please look away");
                 println!("Player 2, time to place your ships");
             }
+
+            // Will run this loop until all ships are placed
             for i in 0..self.ship_count
             {
                 let mut ship_conflict = true;
@@ -412,7 +413,7 @@ impl BattleShipGame
                         self.player_two.print_board(true);
                     }
 
-                    // Get verti or hori
+                    // Get vertical or horizontal
                     let mut correct_input = false;
                     while !correct_input
                     {
@@ -481,6 +482,7 @@ impl BattleShipGame
                         }
                     }
 
+                    // This will check if there will be any overlap with given input and existing ships
                     if n == 1
                     {
                         for k in 0..=i
@@ -550,6 +552,7 @@ impl BattleShipGame
                         }
                     }
 
+                    // This ensures that ships are only placed when they don't overlap
                     if !ship_conflict
                     {
                         // Place a ship
@@ -568,7 +571,10 @@ impl BattleShipGame
         }
     }
 
-    // This will loop until the game is over
+    /// This will loop until the game is over
+    /// It will cycle between each player's turn, allowing
+    /// them to make attacks until it determines that one player
+    /// is out of ships
     pub fn play_game(&mut self)
     {
         let mut game_over = false;
@@ -590,9 +596,6 @@ impl BattleShipGame
 
             println!("Your ships:");
 
-            // Every day we stray further from God's light
-            // WHY ARE THE PLAYERS NOT A VECTOR FOR FUCKS SAKE
-            // Enjoy the if statements
             if self.is_player_one_turn
             {
                 self.player_one.print_board(true);
@@ -611,8 +614,7 @@ impl BattleShipGame
                 self.player_one.print_board(false);
             }
 
-            // Since there's no UI, you can't trust that some dumbass won't pass unusable coordinates
-            // hence a while loop
+            // While loop to ensure valid input coordinates
             while !correct_input
             {
                 let mut row = 0;
@@ -625,16 +627,12 @@ impl BattleShipGame
                 io::stdin().read_line(&mut input).expect("Failed to read line");
                 row = input.trim().parse::<usize>().unwrap_or(0);
 
-                // I have had to add this line so many times
-                // and every time I forgot to do it
                 input = String::new();
-
                 println!("Choose a column:");
                 io::stdin().read_line(&mut input).expect("Failed to read line");
                 col_char = input.trim().parse::<char>().unwrap_or('x');
                 col = self.char_convert(col_char);
 
-                // Do you feel it now Mr. Krabs???
                 if row < 1 || row > 9 || col < 1 || col > 10
                 {
                     println!("Invalid coordinates");
@@ -659,7 +657,6 @@ impl BattleShipGame
                 // The game's finally over
                 game_over = true;
 
-                // But my work is not
                 print!("{esc}c", esc = 27 as char);
                 println!("Player one's final board:");
                 self.player_one.print_board(true);

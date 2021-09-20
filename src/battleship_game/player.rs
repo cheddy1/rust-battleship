@@ -102,7 +102,14 @@ impl Player
     /// respective bool value
     pub fn all_ships_sunk(&self) -> bool
     {
-        self.ships_vec.iter().all(|ship| ship.get_sunk())
+        for i in 0..self.ships_vec.len()
+        {
+            if !self.ships_vec[i].get_sunk()
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /// Gets the player signature, mostly to know at the end which player has won the game
@@ -111,11 +118,14 @@ impl Player
         return &self.player_signature;
     }
 
+    /// Returns the number of ships the player has
     pub fn get_ship_count(&self) -> usize
     {
         return self.ships_vec.len();
     }
 
+    /// Returns true if the input coorinate is attacked,
+    /// false if it is not
     pub fn is_attacked(&self, row: usize, col: usize) -> bool
     {
         if self.board_matrix[row][col] == WaterSquare::Hit
@@ -142,6 +152,7 @@ impl Player
         }
     }
 
+    /// This function checks if there is a ship at the location, and returns true if there is.
     pub fn is_ship(&self, x: usize, y: usize) -> bool
     {
         for i in 0..self.ships_vec.len()
@@ -157,6 +168,7 @@ impl Player
         return false;
     }
 
+    /// This function to convert ints to chars, to be called when printing the board.
     pub fn char_prints(&self, x: usize) -> char
     {
         match x
@@ -175,6 +187,9 @@ impl Player
         }
     }
 
+    /// This function prints the player's board.
+    /// If the bool passed in is true, it will print where the player's ships are.
+    /// If false, it will only print hit locations.
     pub fn print_board(&self, is_turn: bool)
     {
         print!("["); // Start the array in the print

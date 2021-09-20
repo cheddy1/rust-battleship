@@ -29,8 +29,6 @@ impl Ship
     {
         let mut pos_vec = Vec::new();
 
-        // TODO: check ship pos
-
         // For loop to set ship_position coordinates based off direction
         for i in 0..ship_size
         {
@@ -77,6 +75,7 @@ impl Ship
         self.is_sunk
     }
 
+    /// Returns the length of the ship
     pub fn get_len(&self) -> usize
     {
         return self.ship_position.len();
