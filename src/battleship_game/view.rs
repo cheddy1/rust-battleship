@@ -114,21 +114,15 @@ impl Board
         ship_container.set_color(Color::from_u32(0x455766));
 
         // Now, make the ships
-        let ships: [Frame; 5];
         for n in (0..6).rev()
         {
             // 5px was added to the y pos, and 10px taken off the hight of the ship for vertical padding reasons. 
-            ships[n] = Frame::new(350, 55 + ((n as i32 + 1) * SQUARE_SIZE), (n as i32 + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
-            let mut dummy_ship = &ships[n];
+            let mut dummy_ship = Frame::new(350, 55 + ((n as i32 + 1) * SQUARE_SIZE), (n as i32 + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
             dummy_ship.set_frame(FrameType::OvalBox);
             dummy_ship.set_color(Color::from_u32(0xE9ECF0));
             let m = Rc::clone(model);
             dummy_ship.set_callback(move |_| {
                 let m = *m.borrow_mut();
-                match m.game_boat_state
-                {
-                    
-                }
             });
         }
 
