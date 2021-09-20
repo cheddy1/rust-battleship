@@ -310,7 +310,6 @@ impl BattleShipGame
     // cleaned up if need be
 
     // Initialize the game
-    // TODO: Document
     pub fn begin() -> BattleShipGame
     {
         // Obtain ship count
@@ -372,7 +371,6 @@ impl BattleShipGame
     }
 
     // Time to make the game actually play
-    // TODO: Document
     pub fn place_ships(&mut self)
     {
         let mut row: usize;
