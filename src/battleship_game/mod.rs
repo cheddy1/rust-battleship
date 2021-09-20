@@ -44,11 +44,14 @@ const BOARD_TOP_OFFSET: i32 = 50;
 // repeating the same code to draw two boards, we group up all of the
 // widgets that make up a board into a Board widget. That way, we just
 // have to place two boards on the screen.
+
+//Creates a struct with a property of type Group
 struct Board
 {
     grp: Group,
 }
 
+//First implementation of our board
 impl Board
 {
     pub fn new(x: i32, y: i32) -> Self
@@ -62,8 +65,11 @@ impl Board
             BOARD_HEIGHT as i32 * SQUARE_SIZE + NUM_OFFSET, 
             None,
         );
+        //Sets squares' frame to a FlatBox type
         grp.set_frame(FrameType::FlatBox);
 
+        //For loop to set up the dimensions of the board using integers to correspond to its incrementing 
+        //letter in the alphabet
         for (i, c) in ('A'..='J').enumerate() // (0, 'A'), (1, 'B'),...(9, 'J')
         {
             // Column Labels
@@ -74,12 +80,16 @@ impl Board
                 SQUARE_SIZE, 
                 "",
             );
+            //Displaying column labels
             board_col_label.set_label(str::from_utf8(&[c as u8]).unwrap());
+            //Sets board's column label's frame to FlatBox type
             board_col_label.set_frame(FrameType::FlatBox);
         }
 
+        //for loop from 0 to the height of the board
         for j in 0..BOARD_HEIGHT
         {
+            //Row labels
             let mut board_num_label = Frame::new(
                 grp.x(), 
                 j as i32 * SQUARE_SIZE + grp.y() + NUM_OFFSET, 
@@ -87,9 +97,12 @@ impl Board
                 SQUARE_SIZE, 
                 "",
             );
+            //Risplaying row labels
             board_num_label.set_label(&(j + 1).to_string());
+            //Sets board's row label's frame to FlatBox type
             board_num_label.set_frame(FrameType::FlatBox);
 
+            //for loop from 0 to the width of the board
             for i in 0..BOARD_WIDTH
             {
                 // Build board.
@@ -100,12 +113,14 @@ impl Board
                     SQUARE_SIZE, 
                     "~",
                 );
-
+                //Sets boards frame to type BorderBox
                 temp_btn.set_frame(FrameType::BorderBox);
+                //Sets the board's color
                 temp_btn.set_color(Color::from_u32(0x48769C));
+                //Sets the selection color
                 temp_btn.set_selection_color(Color::from_u32(0x1a2b38));
 
-                // Custom function can replace println in future!
+                //Prints player 1's move
                 temp_btn.set_callback(move |btn| {
                     println!("Player 1 {},{}", i, j);
                     btn.set_color(Color::from_u32(0x00000A));
@@ -135,10 +150,17 @@ impl Board
 // viewed as an alternative to subclassing.
 widget_extends!(Board, Group, grp);
 
+/// This is the main game logic handler, it holds both play objects, and therefore both boards and
+/// all the ships on the board
 pub struct BattleShipGame
 {
+    /// The object that holds the first player
     player_one: Player, 
+
+    /// The object that holds the second player
     player_two: Player,
+
+    /// This variable keeps track of whose turn it is
     is_player_one_turn: bool,
     ship_count: usize,
 }
@@ -146,6 +168,8 @@ pub struct BattleShipGame
 #[allow(dead_code, unused_variables, unused_mut, unused_parens, unused_assignments, unused_must_use)]
 impl BattleShipGame
 {
+    /// This is the method you should use to make a new game object, all it needs is:
+    /// - `ship_count`: the amount of ships each player should have on their board
     pub fn init_game(ship_count: usize) -> BattleShipGame
     {
         // I dont know where to put this window creation logic, so it can live in init_game for now.
@@ -216,12 +240,12 @@ impl BattleShipGame
             300, 
             "How many ships do you want to play with?",
             ""
-        );*/
-
+        );
+        //Basic callback functionality
         wind.end();
         wind.show();
         //app.run().unwrap();
-
+        */
         
         BattleShipGame
         {
@@ -233,28 +257,13 @@ impl BattleShipGame
         
     }
 
-
-
-
-
-
-
-    // RELEVANT CODE BEGINS BELOW
-
-
-
-
-
-
+    // RELEVANT CLI CODE BEGINS BELOW
 
 
     // This function will execute the turn for the current player, and will return a bool of
     // whether or not the game has finished
     pub fn take_turn(&mut self, pos: (u8, u8)) -> (FireState, Option<&Players>)
     {
-        // This is gross, I understand that I've copy pasted code and it's not something you're
-        // supposed to do, but I tried using a pointer to point to the current player but rust went
-        // WAAAAAAAAAAAAAAAAA MUTABLE VARIABLES WAAAAAAAAAAAAA I'M A GAY BABY WAAAAAAAAAAAAA
         if self.is_player_one_turn 
         {
             // First we fire on the other player's board
@@ -278,6 +287,8 @@ impl BattleShipGame
         }
     }    
 
+    /// This is a private function that will check to see if there's been a victory from either
+    /// player
     fn check_victory(&self) -> bool
     {
        // We invert the self.is_player_one_turn var right before this, so this will look a little
@@ -676,11 +687,13 @@ impl BattleShipGame
 #[allow(dead_code)]
 impl BattleShipGame
 {
+    //Prints player 1 board
     pub fn print_p1_board(&self)
     {
         self.player_one.print_board(false);
     }
 
+    //Prints player 1's ships
     pub fn print_p1_ships(&self)
     {
         self.player_one.print_ships();
@@ -688,14 +701,39 @@ impl BattleShipGame
 
     pub fn test(&mut self)
     {
-        self.player_one.place_ship((2, 2), false);
-        self.player_one.place_ship((0, 0), true);
+        // Alternate player turns, starting at p1
+        self.turn_debug((0, 0));
+        self.turn_debug((0, 0));
+        self.turn_debug((5, 5));
+        self.turn_debug((2, 2));
+        self.turn_debug((3, 3));
+        self.turn_debug((0, 1));
+    }
 
-        // TODO: Test a move
-        self.player_one.fire((0, 3));
-        self.player_one.fire((2, 3));
-        self.player_one.fire((0, 0));
-        self.player_one.fire((0, 1));
-        self.player_one.fire((2, 2));
+    //Turn debugger
+    pub fn turn_debug(&mut self, pos: (u8, u8))
+    {
+        //Takes a turn 
+        let (hit, vic) = self.take_turn(pos);
+
+        println!("{}, turn for {} at position ({}, {}) resulted in a {}",
+        //Prints whether the game is still going or not
+        match vic
+        {
+            Some(_) => "over",
+            None => "playing",
+        },
+        //Prints whether its player 1's turn or not
+        match &mut self.is_player_one_turn
+        {
+            true => "P1",
+            false => "P2",
+        }, pos.0, pos.1, //Prints the position targeted
+        //Prints whether it was a hit or not
+        match hit
+        {
+            FireState::Miss => "miss",
+            FireState::Hit => "hit",
+        });
     }
 }
