@@ -127,10 +127,7 @@ impl Board
                 let m = *m.borrow_mut();
                 match m.game_boat_state
                 {
-                    BoatState::Placed => 
-                    {
-                        m.game_boat_state = BoatState::Moving(&dummy_ship);
-                    }
+                    
                 }
             });
         }
