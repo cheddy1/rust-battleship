@@ -60,14 +60,18 @@ impl Player
         // from hit to empty so this shouldn't be an issue not having an if
         self.board_matrix[pos.1 as usize][pos.0 as usize] = WaterSquare::Hit;
 
+        println!("Pos: ({}, {})", pos.0, pos.1);
+        self.print_ships();
+
         // We should then see if a ship has been hit
         return match self.ship_index_at(pos)
         {
             Some(i) =>
             {
+                println!("Ship index: {}", i);
+
                 // If we hit some ship, we want to see if it's sunk
                 self.ships_vec.get_mut(i).unwrap().update_ship(&self.board_matrix);
-                //ship.update_ship(&self.board_matrix);
 
                 // Then return a hit
                 FireState::Hit
@@ -217,7 +221,7 @@ impl Player
                 {
                     let to_print = match self.board_matrix[i-1][j-1]
                     {
-                        WaterSquare::Empty => if is_turn && self.is_ship(i-1,j-1) {'S'} else {' '},
+                        WaterSquare::Empty => if is_turn && self.is_ship(j-1,i-1) {'S'} else {' '},
                         WaterSquare::Hit => 'x',
                     };
                     // Print the value

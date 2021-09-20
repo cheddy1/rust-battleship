@@ -33,8 +33,8 @@ impl Ship
         for i in 0..ship_size
         {
             // Creates a new tuple adding i in the correct direction based off of specified ship size and direction
-            let new_point = (start_point.0 + if is_vertical { 0 } else { i as u8 },
-                             start_point.1 + if is_vertical { i as u8 } else { 0 });
+            let new_point = (start_point.0 + if is_vertical { i as u8 } else { 0 },
+                             start_point.1 + if is_vertical { 0 } else { i as u8 });
 
             pos_vec.push(new_point); 
         }

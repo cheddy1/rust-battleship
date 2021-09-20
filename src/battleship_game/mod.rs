@@ -558,11 +558,11 @@ impl BattleShipGame
                         // Place a ship
                         if n == 1
                         {
-                            self.player_one.place_ship((row as u8 - 1, col as u8 - 1), !vertical);
+                            self.player_one.place_ship((col as u8 - 1, row as u8 - 1), !vertical);
                         }
                         else 
                         {
-                            self.player_two.place_ship((row as u8 - 1, col as u8 - 1), !vertical);
+                            self.player_two.place_ship((col as u8 - 1, row as u8 - 1), !vertical);
                         }
                         print!("{esc}c", esc = 27 as char);
                     }
@@ -581,7 +581,7 @@ impl BattleShipGame
         while !game_over
         {
             let mut correct_input = false;
-            print!("{esc}c", esc = 27 as char);
+            // print!("{esc}c", esc = 27 as char);
             if self.is_player_one_turn
             {
                 println!("Please swap to player one");
