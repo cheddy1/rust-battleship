@@ -1,19 +1,21 @@
 use fltk::frame::Frame;
+use std::rc::Rc;
+use std::cell::RefCell;
 
 // Now we need to keep track of whether our boats are being moved on the screen
 // or not.
-pub enum BoatState<'a>
+pub enum BoatState
 {
     Placed,
-    Moving(&'a mut Frame),
+    Moving(Rc<RefCell<Frame>>, i32, i32),
 }
 
-pub struct Model<'a>
+pub struct Model
 {
-    pub game_boat_state: BoatState<'a>,
+    pub game_boat_state: BoatState,
 }
 
-impl<'a> Model<'a>
+impl Model
 {
     pub fn new() -> Self
     {

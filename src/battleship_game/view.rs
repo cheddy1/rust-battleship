@@ -51,6 +51,9 @@ impl Board
 {
     pub fn new(x: i32, y: i32) -> Self
     {
+        // make the model for moving ships
+        let model = Rc::new(RefCell::new(Model::new()));
+
         // The constructor of Board is where we arrange all of the
         // coordinate labels and squares.
         let mut grp = Group::new(
@@ -104,9 +107,21 @@ impl Board
                 temp_btn.set_selection_color(Color::from_u32(0x1a2b38));
 
                 // Custom function can replace println in future!
-                temp_btn.set_callback(move |btn| {
-                    println!("Player 1 {},{}", i, j);
-                    btn.set_color(Color::from_u32(0x00000A));
+                let m = Rc::clone(&model);
+                temp_btn.handle(move |btn, ev| {
+                    if let Event::Push = ev {
+                        if let BoatState::Placed = m.borrow().game_boat_state {
+                            println!("Player 1 {},{}", i, j);
+                            btn.set_color(Color::from_u32(0x00000A));
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                    else {
+                        return false;
+                    }
                 });
             }
         }
@@ -117,7 +132,7 @@ impl Board
         ship_container.set_frame(FrameType::BorderBox);
         ship_container.set_color(Color::from_u32(0x455766));
 
-        let mut ships = ArrayVec::<Frame, 6>::new(); // 'a
+        let mut ships = ArrayVec::<Rc<RefCell<Frame>>, 6>::new(); // 'a
         // Now, make the ships
         for n in 0..6
         {
@@ -125,38 +140,48 @@ impl Board
             let mut dummy_ship = Frame::new(350, 55 + ((n as i32 + 1) * SQUARE_SIZE), (n as i32 + 1) * (SQUARE_SIZE ), SQUARE_SIZE - 10, "");
             dummy_ship.set_frame(FrameType::OvalBox);
             dummy_ship.set_color(Color::from_u32(0xE9ECF0));
-            ships.push(dummy_ship);
+            ships.push(Rc::new(RefCell::new(dummy_ship)));
         }
         // elements of ships have at least lifetime 'a, since ownership was given to the vector
-
-        // make the model for moving ships
-        let model = Rc::new(RefCell::new(Model::new())); // 'b
 
         // now set the callbacks
         for s in ships 
         {
             let m = Rc::clone(&model);
-            s.set_callback(move |s| {
+            let sc = Rc::clone(&s);
+            s.borrow_mut().handle(move |s, ev| {
                 let mut m = m.borrow_mut();
-                match m.game_boat_state {
-                    BoatState::Placed => {
-                        m.game_boat_state = BoatState::Moving(s);
+                match ev {
+                    Event::Push => {
+                        match m.game_boat_state {
+                            BoatState::Placed => {
+                                m.game_boat_state = BoatState::Moving(Rc::clone(&sc), app::event_x() - s.x(), app::event_y() - s.y());
+                                println!("Begin move");
+                            }
+                            BoatState::Moving(_, _, _) => {
+                                m.game_boat_state = BoatState::Placed;
+                                println!("Don't begin move");
+                            }
+                        }
+                        return true;
                     }
-                    BoatState::Moving(_) => {
-                        m.game_boat_state = BoatState::Placed;
-                    }
+                    _ => {return false;}
                 }
             });
         }
 
         let m = Rc::clone(&model);
-        grp.handle({move |_, ev|
+        grp.handle({move |g, ev|
             match ev {
                 Event::Move => {
-                    match m.borrow().game_boat_state {
+                    match &m.borrow().game_boat_state {
                         BoatState::Placed => {return false;},
-                        BoatState::Moving(f) => {
-                            
+                        BoatState::Moving(s, ship_x, ship_y) => {
+                            let (x, y) = (app::event_x(), app::event_y());
+                            let mut s = s.borrow_mut();
+                            s.set_pos(x - g.x() - ship_x, y - g.y() - ship_y);
+                            g.redraw();
+                            println!("Event handled {},{}", x, y);
                             return true;
                         },
                     }
