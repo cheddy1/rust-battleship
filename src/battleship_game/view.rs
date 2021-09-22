@@ -11,11 +11,15 @@ use fltk::
     prelude::*, 
     window::Window, 
     group::Group, 
-    widget_extends
+    widget_extends,
+    enums::Event,
 };
 
 // Standard Library stuff
 use std::str;
+
+// ArrayVec
+use arrayvec::ArrayVec;
 
 // Constants
 use crate::battleship_game::{BOARD_WIDTH, BOARD_HEIGHT};
@@ -45,7 +49,7 @@ struct Board
 
 impl Board
 {
-    pub fn new(x: i32, y: i32, model: &Rc<RefCell<Model>>) -> Self
+    pub fn new(x: i32, y: i32) -> Self
     {
         // The constructor of Board is where we arrange all of the
         // coordinate labels and squares.
@@ -113,18 +117,53 @@ impl Board
         ship_container.set_frame(FrameType::BorderBox);
         ship_container.set_color(Color::from_u32(0x455766));
 
+        let mut ships = ArrayVec::<Frame, 6>::new(); // 'a
         // Now, make the ships
-        for n in (0..6).rev()
+        for n in 0..6
         {
             // 5px was added to the y pos, and 10px taken off the hight of the ship for vertical padding reasons. 
-            let mut dummy_ship = Frame::new(350, 55 + ((n as i32 + 1) * SQUARE_SIZE), (n as i32 + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
+            let mut dummy_ship = Frame::new(350, 55 + ((n as i32 + 1) * SQUARE_SIZE), (n as i32 + 1) * (SQUARE_SIZE ), SQUARE_SIZE - 10, "");
             dummy_ship.set_frame(FrameType::OvalBox);
             dummy_ship.set_color(Color::from_u32(0xE9ECF0));
-            let m = Rc::clone(model);
-            dummy_ship.set_callback(move |_| {
-                let m = *m.borrow_mut();
+            ships.push(dummy_ship);
+        }
+        // elements of ships have at least lifetime 'a, since ownership was given to the vector
+
+        // make the model for moving ships
+        let model = Rc::new(RefCell::new(Model::new())); // 'b
+
+        // now set the callbacks
+        for s in ships 
+        {
+            let m = Rc::clone(&model);
+            s.set_callback(move |s| {
+                let mut m = m.borrow_mut();
+                match m.game_boat_state {
+                    BoatState::Placed => {
+                        m.game_boat_state = BoatState::Moving(s);
+                    }
+                    BoatState::Moving(_) => {
+                        m.game_boat_state = BoatState::Placed;
+                    }
+                }
             });
         }
+
+        let m = Rc::clone(&model);
+        grp.handle({move |_, ev|
+            match ev {
+                Event::Move => {
+                    match m.borrow().game_boat_state {
+                        BoatState::Placed => {return false;},
+                        BoatState::Moving(f) => {
+                            
+                            return true;
+                        },
+                    }
+                },
+                _ => {return false;}
+            }
+        });
 
         grp.end();
 
@@ -142,7 +181,7 @@ impl Board
 // viewed as an alternative to subclassing.
 widget_extends!(Board, Group, grp);
 
-pub fn init_game(model: &Rc<RefCell<Model>>)
+pub fn init_game()
 {
     
     // I dont know where to put this window creation logic, so it can live in init_game for now.
@@ -154,8 +193,8 @@ pub fn init_game(model: &Rc<RefCell<Model>>)
     //let mut p2_button_ary = [[Button::default(); 9]; 10];
 
     // TODO: Move to separate module
-    let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET, model);
-    let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET, model);
+    let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
+    let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
 
 
     // This is a concept of drawing a box to the screen. We can keep it for now as a backup.

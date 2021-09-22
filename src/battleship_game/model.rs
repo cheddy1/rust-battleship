@@ -5,7 +5,7 @@ use fltk::frame::Frame;
 pub enum BoatState<'a>
 {
     Placed,
-    Moving(&'a Frame),
+    Moving(&'a mut Frame),
 }
 
 pub struct Model<'a>
