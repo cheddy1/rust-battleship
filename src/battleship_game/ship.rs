@@ -81,25 +81,3 @@ impl Ship
         return self.ship_position.len();
     }
 }
-
-
-impl Ship
-{
-    /// Prints the vector of ships out in an array style
-    pub fn print_ship(&self)
-    {
-        print!("[ ");
-
-        for (i, pos) in self.ship_position.iter().enumerate()
-        {
-            print!("({}, {})", pos.0, pos.1);
-
-            if i != self.ship_position.len() - 1
-            {
-                print!(", ");
-            }
-        }
-
-        print!(" ]\n");
-    }
-}

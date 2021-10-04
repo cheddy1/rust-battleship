@@ -147,14 +147,6 @@ impl Player
 // Debug implementation for printing a player's board
 impl Player
 {
-    /// Prints the vectors of the ships the player has into the command line, mostly for debugging
-    pub fn print_ships(&self)
-    {
-        for ship in self.ships_vec.iter()
-        {
-            ship.print_ship();
-        }
-    }
 
     /// This function checks if there is a ship at the location, and returns true if there is.
     pub fn is_ship(&self, x: usize, y: usize) -> bool
