@@ -9,6 +9,7 @@ mod ship;
 // Import the battleship_game module from the root of the crate
 use crate::battleship_game::player::*;
 use crate::battleship_game::data_structures::*;
+use rand::Rng;
 
 // // Size constants
 const BOARD_WIDTH: usize = 10;
@@ -171,6 +172,19 @@ impl BattleShipGame
             'i' => return 9,
             'j' => return 10,
             _ => return 0,
+        }
+    }
+
+    pub fn ai_place_ships(&mut self)
+    {
+        for ship in 1..self.ship_count
+        {
+            let mut vertical = true;
+            if ship == 1
+            {
+                let col = rand::thread_rng().gen_range(1..11);
+                let row = rand::thread_rng().gen_range(1..10);
+            }
         }
     }
 
