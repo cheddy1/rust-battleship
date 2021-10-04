@@ -10,35 +10,35 @@ mod ship;
 use crate::battleship_game::player::*;
 use crate::battleship_game::data_structures::*;
 
-// Import FLTK modules for GUI
-#[allow(unused_imports)]
-use fltk::
-{
-    app, 
-    button::Button, 
-    frame::Frame, 
-    text::TextDisplay, 
-    enums::FrameType, 
-    enums::Color, 
-    enums::Align, 
-    prelude::*, 
-    window::Window, 
-    group::Group, 
-    widget_extends
-};
+// // Import FLTK modules for GUI
+// #[allow(unused_imports)]
+// use fltk::
+// {
+//     app, 
+//     button::Button, 
+//     frame::Frame, 
+//     text::TextDisplay, 
+//     enums::FrameType, 
+//     enums::Color, 
+//     enums::Align, 
+//     prelude::*, 
+//     window::Window, 
+//     group::Group, 
+//     widget_extends
+// };
 
-// Standard Library stuff
-use std::str;
+// // Standard Library stuff
+//use std::str;
 
-// Size constants
+// // Size constants
 const BOARD_WIDTH: usize = 10;
 const BOARD_HEIGHT: usize = 9;
-const SQUARE_SIZE: i32 = 50;
-const NUM_OFFSET: i32 = 50;
+// const SQUARE_SIZE: i32 = 50;
+// const NUM_OFFSET: i32 = 50;
 
-const P1_BOARD_LEFT_OFFSET: i32 = 0;
-const P2_BOARD_LEFT_OFFSET: i32 = 850;
-const BOARD_TOP_OFFSET: i32 = 50;
+// const P1_BOARD_LEFT_OFFSET: i32 = 0;
+// const P2_BOARD_LEFT_OFFSET: i32 = 850;
+// const BOARD_TOP_OFFSET: i32 = 50;
 
 // We need to draw two boards on the screen. In order to avoid
 // repeating the same code to draw two boards, we group up all of the
@@ -46,109 +46,109 @@ const BOARD_TOP_OFFSET: i32 = 50;
 // have to place two boards on the screen.
 
 //Creates a struct with a property of type Group
-struct Board
-{
-    grp: Group,
-}
+// struct Board
+// {
+//     grp: Group,
+// }
 
-//First implementation of our board
-impl Board
-{
-    pub fn new(x: i32, y: i32) -> Self
-    {
-        // The constructor of Board is where we arrange all of the
-        // coordinate labels and squares.
-        let mut grp = Group::new(
-            x, 
-            y, 
-            BOARD_WIDTH as i32 * SQUARE_SIZE + NUM_OFFSET, 
-            BOARD_HEIGHT as i32 * SQUARE_SIZE + NUM_OFFSET, 
-            None,
-        );
-        //Sets squares' frame to a FlatBox type
-        grp.set_frame(FrameType::FlatBox);
+// //First implementation of our board
+// impl Board
+// {
+//     pub fn new(x: i32, y: i32) -> Self
+//     {
+//         // The constructor of Board is where we arrange all of the
+//         // coordinate labels and squares.
+//         let mut grp = Group::new(
+//             x, 
+//             y, 
+//             BOARD_WIDTH as i32 * SQUARE_SIZE + NUM_OFFSET, 
+//             BOARD_HEIGHT as i32 * SQUARE_SIZE + NUM_OFFSET, 
+//             None,
+//         );
+//         //Sets squares' frame to a FlatBox type
+//         grp.set_frame(FrameType::FlatBox);
 
-        //For loop to set up the dimensions of the board using integers to correspond to its incrementing 
-        //letter in the alphabet
-        for (i, c) in ('A'..='J').enumerate() // (0, 'A'), (1, 'B'),...(9, 'J')
-        {
-            // Column Labels
-            let mut board_col_label = Frame::new(
-                i as i32 * SQUARE_SIZE + grp.x() + NUM_OFFSET, 
-                grp.y(), 
-                SQUARE_SIZE, 
-                SQUARE_SIZE, 
-                "",
-            );
-            //Displaying column labels
-            board_col_label.set_label(str::from_utf8(&[c as u8]).unwrap());
-            //Sets board's column label's frame to FlatBox type
-            board_col_label.set_frame(FrameType::FlatBox);
-        }
+//         //For loop to set up the dimensions of the board using integers to correspond to its incrementing 
+//         //letter in the alphabet
+//         for (i, c) in ('A'..='J').enumerate() // (0, 'A'), (1, 'B'),...(9, 'J')
+//         {
+//             // Column Labels
+//             let mut board_col_label = Frame::new(
+//                 i as i32 * SQUARE_SIZE + grp.x() + NUM_OFFSET, 
+//                 grp.y(), 
+//                 SQUARE_SIZE, 
+//                 SQUARE_SIZE, 
+//                 "",
+//             );
+//             //Displaying column labels
+//             board_col_label.set_label(str::from_utf8(&[c as u8]).unwrap());
+//             //Sets board's column label's frame to FlatBox type
+//             board_col_label.set_frame(FrameType::FlatBox);
+//         }
 
-        //for loop from 0 to the height of the board
-        for j in 0..BOARD_HEIGHT
-        {
-            //Row labels
-            let mut board_num_label = Frame::new(
-                grp.x(), 
-                j as i32 * SQUARE_SIZE + grp.y() + NUM_OFFSET, 
-                SQUARE_SIZE, 
-                SQUARE_SIZE, 
-                "",
-            );
-            //Risplaying row labels
-            board_num_label.set_label(&(j + 1).to_string());
-            //Sets board's row label's frame to FlatBox type
-            board_num_label.set_frame(FrameType::FlatBox);
+//         //for loop from 0 to the height of the board
+//         for j in 0..BOARD_HEIGHT
+//         {
+//             //Row labels
+//             let mut board_num_label = Frame::new(
+//                 grp.x(), 
+//                 j as i32 * SQUARE_SIZE + grp.y() + NUM_OFFSET, 
+//                 SQUARE_SIZE, 
+//                 SQUARE_SIZE, 
+//                 "",
+//             );
+//             //Risplaying row labels
+//             board_num_label.set_label(&(j + 1).to_string());
+//             //Sets board's row label's frame to FlatBox type
+//             board_num_label.set_frame(FrameType::FlatBox);
 
-            //for loop from 0 to the width of the board
-            for i in 0..BOARD_WIDTH
-            {
-                // Build board.
-                let mut temp_btn = Button::new(
-                    i as i32 * SQUARE_SIZE + grp.x() + NUM_OFFSET, 
-                    j as i32 * SQUARE_SIZE + grp.y() + NUM_OFFSET, 
-                    SQUARE_SIZE, 
-                    SQUARE_SIZE, 
-                    "~",
-                );
-                //Sets boards frame to type BorderBox
-                temp_btn.set_frame(FrameType::BorderBox);
-                //Sets the board's color
-                temp_btn.set_color(Color::from_u32(0x48769C));
-                //Sets the selection color
-                temp_btn.set_selection_color(Color::from_u32(0x1a2b38));
+//             //for loop from 0 to the width of the board
+//             for i in 0..BOARD_WIDTH
+//             {
+//                 // Build board.
+//                 let mut temp_btn = Button::new(
+//                     i as i32 * SQUARE_SIZE + grp.x() + NUM_OFFSET, 
+//                     j as i32 * SQUARE_SIZE + grp.y() + NUM_OFFSET, 
+//                     SQUARE_SIZE, 
+//                     SQUARE_SIZE, 
+//                     "~",
+//                 );
+//                 //Sets boards frame to type BorderBox
+//                 temp_btn.set_frame(FrameType::BorderBox);
+//                 //Sets the board's color
+//                 temp_btn.set_color(Color::from_u32(0x48769C));
+//                 //Sets the selection color
+//                 temp_btn.set_selection_color(Color::from_u32(0x1a2b38));
 
-                //Prints player 1's move
-                temp_btn.set_callback(move |btn| {
-                    println!("Player 1 {},{}", i, j);
-                    btn.set_color(Color::from_u32(0x00000A));
-                });
-            }
-        }
-        // Create new frame for a container that holds player 1's ships
-        let end_of_squares = grp.x() + NUM_OFFSET + (SQUARE_SIZE * BOARD_WIDTH as i32);
-        let top_of_squares = grp.y() + NUM_OFFSET;
-        let mut ship_container = Frame::new(end_of_squares, top_of_squares, 300, 450, "");
-        ship_container.set_frame(FrameType::BorderBox);
-        ship_container.set_color(Color::from_u32(0x455766));
+//                 //Prints player 1's move
+//                 temp_btn.set_callback(move |btn| {
+//                     println!("Player 1 {},{}", i, j);
+//                     btn.set_color(Color::from_u32(0x00000A));
+//                 });
+//             }
+//         }
+//         // Create new frame for a container that holds player 1's ships
+//         let end_of_squares = grp.x() + NUM_OFFSET + (SQUARE_SIZE * BOARD_WIDTH as i32);
+//         let top_of_squares = grp.y() + NUM_OFFSET;
+//         let mut ship_container = Frame::new(end_of_squares, top_of_squares, 300, 450, "");
+//         ship_container.set_frame(FrameType::BorderBox);
+//         ship_container.set_color(Color::from_u32(0x455766));
 
-        grp.end();
+//         grp.end();
 
-        Self { grp } // In Rust, you can return an expression by simply writing
-        // it as the last line of your function without a semicolon. It's just
-        // a concise way of returning things without having to type the word
-        // "return". Here, our constructor returns the object we just initialized.
-    }
-}
+//         Self { grp } // In Rust, you can return an expression by simply writing
+//         // it as the last line of your function without a semicolon. It's just
+//         // a concise way of returning things without having to type the word
+//         // "return". Here, our constructor returns the object we just initialized.
+//     }
+// }
 
 // Normally we would subclass FL_Group (https://www.fltk.org/doc-1.1/Fl_Group.html)
 // in order to define our own widget as a collection of widgets.
 // However, Rust doesn't really have subclasses; it has Traits, which are analogous to 
 // Classes in Haskell or Interfaces in Java/C++. Anyway, the following line can be 
 // viewed as an alternative to subclassing.
-widget_extends!(Board, Group, grp);
+// widget_extends!(Board, Group, grp);
 
 /// This is the main game logic handler, it holds both play objects, and therefore both boards and
 /// all the ships on the board
@@ -163,6 +163,7 @@ pub struct BattleShipGame
     /// This variable keeps track of whose turn it is
     is_player_one_turn: bool,
     ship_count: usize,
+    is_p2_ai: bool,
 }
 
 #[allow(dead_code, unused_variables, unused_mut, unused_parens, unused_assignments, unused_must_use)]
@@ -170,92 +171,92 @@ impl BattleShipGame
 {
     /// This is the method you should use to make a new game object, all it needs is:
     /// - `ship_count`: the amount of ships each player should have on their board
-    pub fn init_game(ship_count: usize) -> BattleShipGame
-    {
-        // I dont know where to put this window creation logic, so it can live in init_game for now.
-        let app = app::App::default();
-        let mut wind = Window::new(100, 100, 1750, 600, "💥 Rust Battleship 💥");
+    // pub fn init_game(ship_count: usize) -> BattleShipGame
+    // {
+    //     // I dont know where to put this window creation logic, so it can live in init_game for now.
+    //     let app = app::App::default();
+    //     let mut wind = Window::new(100, 100, 1750, 600, "💥 Rust Battleship 💥");
 
-        // Track the buttons with 2d array (broken atm)
-        //let mut p1_button_ary = [[Button::default(); 9]; 10];
-        //let mut p2_button_ary = [[Button::default(); 9]; 10];
+    //     // Track the buttons with 2d array (broken atm)
+    //     //let mut p1_button_ary = [[Button::default(); 9]; 10];
+    //     //let mut p2_button_ary = [[Button::default(); 9]; 10];
 
-        // TODO: Move to separate module
+    //     // TODO: Move to separate module
 
-        let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
-        let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
-        // Test ship graphics for Player 1
-        for n in (0..6).rev()
-        {
-            // 5px was added to the y pos, and 10px taken off the hight of the ship for vertical padding reasons. 
-            let mut dummy_ship = Frame::new(350, 55 + ((n + 1) * SQUARE_SIZE), (n + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
-            dummy_ship.set_frame(FrameType::OvalBox);
-            dummy_ship.set_color(Color::from_u32(0xE9ECF0));
-        }
+    //     let mut p1_board = Board::new(P1_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
+    //     let mut p2_board = Board::new(P2_BOARD_LEFT_OFFSET, BOARD_TOP_OFFSET);
+    //     // Test ship graphics for Player 1
+    //     for n in (0..6).rev()
+    //     {
+    //         // 5px was added to the y pos, and 10px taken off the hight of the ship for vertical padding reasons. 
+    //         let mut dummy_ship = Frame::new(350, 55 + ((n + 1) * SQUARE_SIZE), (n + 1) * (SQUARE_SIZE ), (SQUARE_SIZE - 10), "");
+    //         dummy_ship.set_frame(FrameType::OvalBox);
+    //         dummy_ship.set_color(Color::from_u32(0xE9ECF0));
+    //     }
 
 
-        // This is a concept of drawing a box to the screen. We can keep it for now as a backup.
-        // let mut screen_blocker1 = fltk::draw::draw_box(FrameType::FlatBox, 0, 0, 1750, 600, Color::from_u32(0x00000A));
+    //     // This is a concept of drawing a box to the screen. We can keep it for now as a backup.
+    //     // let mut screen_blocker1 = fltk::draw::draw_box(FrameType::FlatBox, 0, 0, 1750, 600, Color::from_u32(0x00000A));
 
-        // Button that covers the screen between turns.
-        let mut screen_blocker = Button::new(0, 0, 1750, 600, "Click here to start your turn.");
+    //     // Button that covers the screen between turns.
+    //     let mut screen_blocker = Button::new(0, 0, 1750, 600, "Click here to start your turn.");
 
-        screen_blocker.set_frame(FrameType::FlatBox);
-        screen_blocker.set_color(Color::from_u32(0xC0C0C0));
-        screen_blocker.hide();
+    //     screen_blocker.set_frame(FrameType::FlatBox);
+    //     screen_blocker.set_color(Color::from_u32(0xC0C0C0));
+    //     screen_blocker.hide();
 
-        // Button that indicates a user is finished looking a the board after a turn.
-        let mut cont_btn = Button::new( 1600, 555, 100, 40, "Continue");
+    //     // Button that indicates a user is finished looking a the board after a turn.
+    //     let mut cont_btn = Button::new( 1600, 555, 100, 40, "Continue");
 
-        cont_btn.set_frame(FrameType::ThinUpBox);
-        cont_btn.set_color(Color::from_u32(0x4C9C48));
-        cont_btn.set_selection_color(Color::from_u32(0x397536));
+    //     cont_btn.set_frame(FrameType::ThinUpBox);
+    //     cont_btn.set_color(Color::from_u32(0x4C9C48));
+    //     cont_btn.set_selection_color(Color::from_u32(0x397536));
 
-        // Hide the screen blocker when clicked.
-        screen_blocker.set_callback(move |btn|
-        {
-            println!("Player 1");
-            btn.hide();
-        });
+    //     // Hide the screen blocker when clicked.
+    //     screen_blocker.set_callback(move |btn|
+    //     {
+    //         println!("Player 1");
+    //         btn.hide();
+    //     });
 
-        // Call back for the continue button that blocks the screen with screen_blocker.
-        cont_btn.set_callback(move |btn|
-        {
-            println!("Player 1");
-            screen_blocker.show();
-            // btn.hide() // possibly hide or disable when the screen_blocker is shown?
-        });
+    //     // Call back for the continue button that blocks the screen with screen_blocker.
+    //     cont_btn.set_callback(move |btn|
+    //     {
+    //         println!("Player 1");
+    //         screen_blocker.show();
+    //         // btn.hide() // possibly hide or disable when the screen_blocker is shown?
+    //     });
 
         
-        // Cool alert... we can delete once we know we dont need it.
-        // fltk::dialog::alert(
-        //     875, 
-        //     300, 
-        //     "Dissmiss to start your turn."
-        // );
+    //     // Cool alert... we can delete once we know we dont need it.
+    //     // fltk::dialog::alert(
+    //     //     875, 
+    //     //     300, 
+    //     //     "Dissmiss to start your turn."
+    //     // );
 
-        // Dont know how to set a callback for this yet, or require valid input.
-        /*let mut ship_input = fltk::dialog::input(
-            875, 
-            300, 
-            "How many ships do you want to play with?",
-            ""
-        );
-        //Basic callback functionality
-        wind.end();
-        wind.show();
-        //app.run().unwrap();
-        */
+    //     // Dont know how to set a callback for this yet, or require valid input.
+    //     /*let mut ship_input = fltk::dialog::input(
+    //         875, 
+    //         300, 
+    //         "How many ships do you want to play with?",
+    //         ""
+    //     );
+    //     //Basic callback functionality
+    //     wind.end();
+    //     wind.show();
+    //     //app.run().unwrap();
+    //     */
         
-        BattleShipGame
-        {
-            player_one: Player::new_player(ship_count, Players::PlayerOne),
-            player_two: Player::new_player(ship_count, Players::PlayerTwo),
-            is_player_one_turn: true,
-            ship_count: ship_count,
-        }
+    //     // BattleShipGame
+    //     // {
+    //     //     player_one: Player::new_player(ship_count, Players::PlayerOne),
+    //     //     player_two: Player::new_player(ship_count, Players::PlayerTwo),
+    //     //     is_player_one_turn: true,
+    //     //     ship_count: ship_count,
+    //     // }
         
-    }
+    //}
 
     // RELEVANT CLI CODE BEGINS BELOW
 
@@ -311,20 +312,46 @@ impl BattleShipGame
     {
         // Obtain ship count
         let mut ship_count = 0;
+        let mut local = 1;
+        let mut difficulty = 1;
+        let mut ai_bool = false;
         let mut correct_input = false;
         while  !correct_input
         {
             let mut input = String::new();
+            println!("Are you playing (1) locally or with an (2) AI? Type 1 or 2!");
+            io::stdin().read_line(&mut input).expect("Failed to read line");
+            local = input.trim().parse::<usize>().unwrap_or(0);
+            
+            if local == 2
+            {
+                println!("Do you want to play on (1) easy, (2) medium, or (3) hard mode? Type 1, 2, 3!");
+                input = String::new();
+                io::stdin().read_line(&mut input).expect("Failed to read line");
+                difficulty = input.trim().parse::<usize>().unwrap_or(0);
+                ai_bool = true;
+            }
+
             println!("How many ships will you play with?");
+            input = String::new();
             io::stdin().read_line(&mut input).expect("Failed to read line");
             ship_count = input.trim().parse::<usize>().unwrap_or(0);
 
             if ship_count < 1 || ship_count > 6
             {
-                println!("Must be between 1 and 6");
+                println!("Ship count must be between 1 and 6.");
+            }
+            else if local < 1 || local > 2
+            {
+                println!("Must chose (1) local or (2) AI. Type 1 or 2!");
+            }
+            else if difficulty < 1 || difficulty > 3
+            {
+                println!("Must chose (1) easy, (2) medium, or (3) hard mode? Type 1, 2, 3!");
             }
             else
             {
+                println!("{}", local);
                 correct_input = true;
             }
         }
@@ -335,6 +362,7 @@ impl BattleShipGame
             player_two: Player::new_player(ship_count, Players::PlayerTwo),
             is_player_one_turn: true,
             ship_count: ship_count,
+            is_p2_ai: ai_bool,
         }
     }
 
@@ -377,12 +405,17 @@ impl BattleShipGame
         let mut col_char: char;
         let mut col: usize;
         let mut vertical = true;
+        let mut local_players = 2;
 
         // This line clears the terminal
         print!("{esc}c", esc = 27 as char);
         
-        // Will run this loop twice, as there are two players
-        for n in 1..=2
+        if self.is_p2_ai == true
+        {
+            local_players = 1;  
+        }
+        
+        for n in 1..=local_players
         {
             if n == 1
             {
@@ -599,11 +632,11 @@ impl BattleShipGame
             if self.is_player_one_turn
             {
                 self.player_one.print_board(true);
-                //if !self.player_one.printed_s_check()
-                //{
-                //    println!("player 2 wins!");
-                //    break;
-                //}
+                if !self.player_one.printed_s_check()
+                {
+                   println!("player 2 wins!");
+                   break;
+                }
             }
             else
             {
