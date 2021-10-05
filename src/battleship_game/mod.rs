@@ -484,89 +484,97 @@ impl BattleShipGame
         let mut game_over = false;
         while !game_over
         {
-            let mut correct_input = false;
-            // print!("{esc}c", esc = 27 as char);
-            if self.is_player_one_turn
+            if self.is_p2_ai == true
             {
-                println!("Please swap to player one");
+                
             }
             else
             {
-                println!("Please swap to player two");
-            }
-            println!("Press enter when ready");
-            let mut garbage = String::new();
-            io::stdin().read_line(&mut garbage);
-
-            println!("Your ships:");
-
-            if self.is_player_one_turn
-            {
-                self.player_one.print_scoreboard();
-                self.player_one.print_board(true);
-                if !self.player_one.printed_s_check()
+                let mut correct_input = false;
+                // print!("{esc}c", esc = 27 as char);
+                if self.is_player_one_turn
                 {
-                   println!("player 2 wins!");
-                   break;
-                }
-            }
-            else
-            {
-                self.player_two.print_scoreboard();
-                self.player_two.print_board(true);
-                if !self.player_two.printed_s_check()
-                {
-                    println!("player 1 wins!");
-                    break;
-                }
-            }
-            println!("Your opponent's board so far:");
-            if self.is_player_one_turn
-            {
-                self.player_two.print_board(false);
-            }
-            else
-            {
-                self.player_one.print_board(false);
-            }
-
-            // While loop to ensure valid input coordinates
-            while !correct_input
-            {
-                let mut row = 0;
-                let mut col = 0;
-                let mut col_char: char;
-                let mut input = String::new();
-                println!("Time to make an attack!");
-
-                println!("Choose a row:");
-                io::stdin().read_line(&mut input).expect("Failed to read line");
-                row = input.trim().parse::<usize>().unwrap_or(0);
-
-                input = String::new();
-                println!("Choose a column:");
-                io::stdin().read_line(&mut input).expect("Failed to read line");
-                col_char = input.trim().parse::<char>().unwrap_or('x');
-                col = self.char_convert(col_char);
-
-                if row < 1 || row > 9 || col < 1 || col > 10
-                {
-                    println!("Invalid coordinates");
-                }
-                else if self.is_player_one_turn && self.player_two.is_attacked(row-1, col-1)
-                {
-                    println!("Already attacked there");
-                }
-                else if !self.is_player_one_turn && self.player_one.is_attacked(row-1, col-1)
-                {
-                    println!("Already attacked there");
+                    println!("Please swap to player one");
                 }
                 else
                 {
-                    correct_input = true;
-                    self.take_turn((col as u8 - 1, row as u8 - 1));
+                    println!("Please swap to player two");
+                }
+                println!("Press enter when ready");
+                let mut garbage = String::new();
+                io::stdin().read_line(&mut garbage);
+
+                println!("Your ships:");
+
+                if self.is_player_one_turn
+                {
+                    self.player_one.print_scoreboard();
+                    self.player_one.print_board(true);
+                    if !self.player_one.printed_s_check()
+                    {
+                    println!("player 2 wins!");
+                    break;
+                    }
+                }
+                else
+                {
+                    self.player_two.print_scoreboard();
+                    self.player_two.print_board(true);
+                    if !self.player_two.printed_s_check()
+                    {
+                        println!("player 1 wins!");
+                        break;
+                    }
+                }
+                println!("Your opponent's board so far:");
+                if self.is_player_one_turn
+                {
+                    self.player_two.print_board(false);
+                }
+                else
+                {
+                    self.player_one.print_board(false);
+                }
+
+                // While loop to ensure valid input coordinates
+                while !correct_input
+                {
+                    let mut row = 0;
+                    let mut col = 0;
+                    let mut col_char: char;
+                    let mut input = String::new();
+                    println!("Time to make an attack!");
+
+                    println!("Choose a row:");
+                    io::stdin().read_line(&mut input).expect("Failed to read line");
+                    row = input.trim().parse::<usize>().unwrap_or(0);
+
+                    input = String::new();
+                    println!("Choose a column:");
+                    io::stdin().read_line(&mut input).expect("Failed to read line");
+                    col_char = input.trim().parse::<char>().unwrap_or('x');
+                    col = self.char_convert(col_char);
+
+                    if row < 1 || row > 9 || col < 1 || col > 10
+                    {
+                        println!("Invalid coordinates");
+                    }
+                    else if self.is_player_one_turn && self.player_two.is_attacked(row-1, col-1)
+                    {
+                        println!("Already attacked there");
+                    }
+                    else if !self.is_player_one_turn && self.player_one.is_attacked(row-1, col-1)
+                    {
+                        println!("Already attacked there");
+                    }
+                    else
+                    {
+                        correct_input = true;
+                        self.take_turn((col as u8 - 1, row as u8 - 1));
+                    }
                 }
             }
+            
             
         }
     }
