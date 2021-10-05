@@ -3,6 +3,7 @@ use crate::battleship_game::BOARD_HEIGHT;
 use crate::battleship_game::data_structures::*;
 use crate::battleship_game::ship::*;
 
+
 /// This is the struct that contains the data for each indiviual player
 pub struct Player
 {
@@ -19,6 +20,10 @@ pub struct Player
 
     /// This will be used to detect if an S is printed
     printed_s: bool,
+
+    number_of_hits: u8,
+
+    number_of_misses: u8,
 }
 
 #[allow(dead_code, unused_variables, unused_mut)]
@@ -43,6 +48,10 @@ impl Player
             player_signature: player_sig, 
 
             printed_s: true,
+
+            number_of_hits: 0,
+
+            number_of_misses: 0,
        }
     }
 
@@ -76,9 +85,22 @@ impl Player
                 // Then return a hit
                 FireState::Hit
             }
-            None => FireState::Miss
+            None => {
+                FireState::Miss
+            }
         }
 
+    }
+
+    pub fn count_hits_misses(&mut self, pos: (u8, u8)){
+        return match self.ship_index_at(pos){
+            Some(i) => {
+                self.number_of_hits += 1;
+            }
+            None => {
+                self.number_of_misses +=1;
+            }
+        }
     }
 
     /// Function for returning if there's a ship at a particular location, if there's a ship, this
@@ -251,5 +273,26 @@ impl Player
 
         // Print the closing bracket for the array
         print!(" ]\n");
+    }
+
+    pub fn print_scoreboard(&mut self){ 
+        let accuracy: f32;
+        let mut number_of_ships = self.get_ship_count();
+        for ship in &self.ships_vec {
+            if ship.get_sunk() == true {
+                number_of_ships -= 1;
+            }
+        }
+
+        if self.number_of_hits + self.number_of_misses == 0 {
+            accuracy = 0.0;
+        } else {
+            accuracy = (self.number_of_hits as f32 / (self.number_of_hits as f32 + self.number_of_misses as f32)) * 100.0;
+        }
+
+        print!("Ships left: {}\n", number_of_ships);
+        print!("Hits: {}\n", self.number_of_hits);
+        print!("Misses: {}\n", self.number_of_misses);
+        print!("Accuracy: {}%\n", accuracy);
     }
 }
