@@ -130,7 +130,6 @@ impl BattleShipGame
             }
             else
             {
-                println!("{}", local);
                 correct_input = true;
             }
         }
@@ -179,14 +178,92 @@ impl BattleShipGame
 
     pub fn ai_place_ships(&mut self)
     {
-        for ship in 1..self.ship_count
+        for ship in 0..self.ship_count
         {
-            let mut vertical = true;
-            if ship == 1
+            let mut ship_conflict = true;
+            while ship_conflict
             {
-                let col = rand::thread_rng().gen_range(1..11);
-                let row = rand::thread_rng().gen_range(1..10);
+                let mut vertical = true;
+                if ship == 0
+                {
+                    let col = rand::thread_rng().gen_range(1..11);
+                    let row = rand::thread_rng().gen_range(1..10);
+                    self.player_two.place_ship((col as u8 - 1, row as u8 - 1), !vertical);
+                    ship_conflict = false;
+                }
+                else
+                {
+                    let mut valid_loc = false;
+                    let hv = rand::thread_rng().gen_range(1..3); 
+                    while !valid_loc
+                    {
+                        let col = rand::thread_rng().gen_range(1..11);
+                        let row = rand::thread_rng().gen_range(1..10);
+                        // Vertical
+                        if hv == 1
+                        {
+                            if row + ship > 9 && hv == 1
+                            {
+                                valid_loc = false;
+                            }
+                            else
+                            {
+                                for k in 0..= ship
+                                {
+                                    if self.player_two.ship_index_at((row as u8 - 1 + k as u8, col as u8 - 1)) == None
+                                    {
+                                        valid_loc = true;
+                                        ship_conflict = false;
+                                        
+                                    }
+                                    else
+                                    {
+                                        valid_loc = false;
+                                        break;
+                                    }
+                                }
+                                if !ship_conflict && valid_loc
+                                {
+                                    self.player_two.place_ship((col as u8 - 1, row as u8 - 1), !vertical);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            vertical = false;
+                            if col + ship > 10 && !vertical
+                            {
+                                valid_loc = false;
+                            }
+                            else
+                            {
+                                for k in 0..= ship
+                                {
+                                    if self.player_two.ship_index_at((row as u8 - 1, col as u8 - 1 + k as u8)) == None
+                                    {
+                                        valid_loc = true;
+                                        ship_conflict = false;
+                                    }
+                                    else
+                                    {
+                                        valid_loc = false;
+                                        break;
+                                    }
+                                }
+                                if !ship_conflict && valid_loc
+                                {
+                                    self.player_two.place_ship((col as u8 - 1, row as u8 - 1), !vertical);
+                                }
+                            
+                            }
+                        }
+                    }
+                    
+                }
+                
             }
+            
+            
         }
     }
 
@@ -200,11 +277,13 @@ impl BattleShipGame
         let mut local_players = 2;
 
         // This line clears the terminal
-        print!("{esc}c", esc = 27 as char);
+        //print!("{esc}c", esc = 27 as char);
         
         if self.is_p2_ai == true
         {
             local_players = 1;  
+            self.ai_place_ships();
+            self.player_two.print_board(true);
         }
         
         for n in 1..=local_players
