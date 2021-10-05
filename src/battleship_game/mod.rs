@@ -29,6 +29,7 @@ pub struct BattleShipGame
     is_player_one_turn: bool,
     ship_count: usize,
     is_p2_ai: bool,
+    ai_difficulty: usize,
 }
 
 #[allow(dead_code, unused_variables, unused_mut, unused_parens, unused_assignments, unused_must_use)]
@@ -141,6 +142,7 @@ impl BattleShipGame
             is_player_one_turn: true,
             ship_count: ship_count,
             is_p2_ai: ai_bool,
+            ai_difficulty: difficulty,
         }
     }
 
@@ -486,7 +488,7 @@ impl BattleShipGame
         {
             if self.is_p2_ai == true
             {
-                
+
             }
             else
             {
