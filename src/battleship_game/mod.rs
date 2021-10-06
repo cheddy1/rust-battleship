@@ -40,6 +40,34 @@ impl BattleShipGame
 
     /// This function will execute the turn for the current player, and will return a bool of
     /// whether or not the game has finished
+    pub fn take_ai_turn(&mut self, pos: (u8, u8)) -> (FireState, Option<&Players>)
+    {
+    	 if self.is_player_one_turn 
+        {
+            // First we fire on the other player's board
+            let hit_or_miss = self.player_two.fire(pos);
+            self.player_one.count_hits_misses(pos);
+
+            // Invert the member variable dictating whose turn it is
+            self.is_player_one_turn = !self.is_player_one_turn;
+
+            // Then we return either a Some is victory is achieved, or a None if it hasn't
+            let vic = if self.check_victory() { Some(self.player_one.get_sig()) } else { None };
+
+            (hit_or_miss, vic)
+        }
+        else
+        {
+            // Same idea here
+            println!("Hello");
+            let hit_or_miss = self.player_one.fire(pos);
+            self.player_two.count_hits_misses(pos);
+            self.is_player_one_turn = !self.is_player_one_turn;
+            let vic = if self.check_victory() { Some(self.player_two.get_sig()) } else { None };
+            (hit_or_miss, vic)
+        }
+     }
+    
     pub fn take_turn(&mut self, pos: (u8, u8)) -> (FireState, Option<&Players>)
     {
         if self.is_player_one_turn 
@@ -285,7 +313,7 @@ impl BattleShipGame
         {
             local_players = 1;  
             self.ai_place_ships();
-            self.player_two.print_board(true);
+            //self.player_two.print_board(true);
         }
         
         for n in 1..=local_players
@@ -476,7 +504,91 @@ impl BattleShipGame
             }
         }
     }
+    
+     
+    pub fn ai_difficulty_turn(&mut self)
+    {
+    	 let col = rand::thread_rng().gen_range(1..11);
+        let row = rand::thread_rng().gen_range(1..10);
+    	self.take_ai_turn((col as u8 - 1, row as u8 - 1));
+    }
+    pub fn ai_play_game(&mut self)
+    {
+    	let mut correct_input = false;
+        if self.is_player_one_turn
+        {
+           println!("Your ships:");
+           self.player_one.print_scoreboard();
+           self.player_one.print_board(true);
+           if !self.player_one.printed_s_check()
+           {
+              println!("AI wins!");
+              //break;
+           }	
+            
+        }
+        else
+        {
+           if !self.player_two.printed_s_check()
+           {
+              println!("player 1 wins!");
+              //break;
+           }
+        }
+ 	
+           if self.is_player_one_turn
+           {
+           	println!("AI's board so far:");
+               self.player_two.print_board(false);
+           }
+      while !correct_input
+      {
+      	if self.is_player_one_turn
+      	{
+            let mut row = 0;
+            let mut col = 0;
+            let mut col_char: char;
+            let mut input = String::new();
+            println!("Time to make an attack!");
 
+            println!("Choose a row:");
+            io::stdin().read_line(&mut input).expect("Failed to read line");
+            row = input.trim().parse::<usize>().unwrap_or(0);
+
+            input = String::new();
+            println!("Choose a column:");
+            io::stdin().read_line(&mut input).expect("Failed to read line");
+            col_char = input.trim().parse::<char>().unwrap_or('x');
+            col = self.char_convert(col_char);
+
+            if row < 1 || row > 9 || col < 1 || col > 10
+            {
+                println!("Invalid coordinates");
+            }
+            else if self.is_player_one_turn && self.player_two.is_attacked(row-1, col-1)
+            {
+                println!("Already attacked there");
+            }
+            else if !self.is_player_one_turn && self.player_one.is_attacked(row-1, col-1)
+            {
+                println!("Already attacked there");
+            }
+            else
+            {
+                correct_input = true;
+                self.take_ai_turn((col as u8 - 1, row as u8 - 1));
+            }
+        }
+        else
+        {
+        	println!("Bye");
+        	correct_input=true;
+        	self.ai_difficulty_turn();
+        }
+        
+      }
+    }
+                           
     /// This will loop until the game is over
     /// It will cycle between each player's turn, allowing
     /// them to make attacks until it determines that one player
@@ -488,7 +600,7 @@ impl BattleShipGame
         {
             if self.is_p2_ai == true
             {
-
+		self.ai_play_game();
             }
             else
             {
@@ -507,7 +619,6 @@ impl BattleShipGame
                 io::stdin().read_line(&mut garbage);
 
                 println!("Your ships:");
-
                 if self.is_player_one_turn
                 {
                     self.player_one.print_scoreboard();
