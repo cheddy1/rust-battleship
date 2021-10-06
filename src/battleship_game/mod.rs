@@ -512,6 +512,25 @@ impl BattleShipGame
         println!("AI fired at: ({}, {})", col, row);
     	self.take_turn((col as u8 - 1, row as u8 - 1));
     }
+    
+    pub fn ai_hard_turn(&mut self)
+    {
+
+        while self.is_player_one_turn == false
+        {
+            for x in 1..=10{
+                for y in 1..=9{
+                    if self.player_one.is_ship(x-1,y-1) == true && self.player_one.board_matrix[x-1][y-1] == WaterSquare::Empty
+                    {
+                        println!("AI fired at: ({}, {})", x, y);
+                        self.take_turn((x as u8 - 1,y as u8 - 1));
+                    }
+                }
+            }
+        }
+    }
+
+
     pub fn ai_play_game(&mut self)
     {
     	let mut correct_input = false;
@@ -584,6 +603,10 @@ impl BattleShipGame
             if self.ai_difficulty == 1
             {
         	    self.ai_easy_turn();
+            }
+            if self.ai_difficulty == 3
+            {
+                self.ai_hard_turn();
             }
             print!("{esc}c", esc = 27 as char);
         }
