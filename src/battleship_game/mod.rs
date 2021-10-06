@@ -317,16 +317,28 @@ impl BattleShipGame
         
         for n in 1..=local_players
         {
-            if n == 1
-            {
-                println!("Player 2, please look away");
-                println!("Player 1, time to place your ships");
-            }
-            else 
-            {
-                println!("Player 1, please look away");
-                println!("Player 2, time to place your ships");
-            }
+		if(self.is_p2_ai==true)
+		{
+			if(n==1)
+			{
+				println!("Player 1, time to place your ships")
+				
+			}
+		}
+		else
+		{
+		
+		   if n == 1
+		    {
+		        println!("Player 2, please look away");
+		        println!("Player 1, time to place your ships");
+		    }
+		    else 
+		    {
+		        println!("Player 1, please look away");
+		        println!("Player 2, time to place your ships");
+		    }
+		 }
 
             // Will run this loop until all ships are placed
             for i in 0..self.ship_count
