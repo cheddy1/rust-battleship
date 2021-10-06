@@ -40,32 +40,6 @@ impl BattleShipGame
 
     /// This function will execute the turn for the current player, and will return a bool of
     /// whether or not the game has finished
-    pub fn take_ai_turn(&mut self, pos: (u8, u8)) -> (FireState, Option<&Players>)
-    {
-    	 if self.is_player_one_turn 
-        {
-            // First we fire on the other player's board
-            let hit_or_miss = self.player_two.fire(pos);
-            self.player_one.count_hits_misses(pos);
-
-            // Invert the member variable dictating whose turn it is
-            self.is_player_one_turn = !self.is_player_one_turn;
-
-            // Then we return either a Some is victory is achieved, or a None if it hasn't
-            let vic = if self.check_victory() { Some(self.player_one.get_sig()) } else { None };
-
-            (hit_or_miss, vic)
-        }
-        else
-        {
-            // Same idea here
-            let hit_or_miss = self.player_one.fire(pos);
-            self.player_two.count_hits_misses(pos);
-            self.is_player_one_turn = !self.is_player_one_turn;
-            let vic = if self.check_victory() { Some(self.player_two.get_sig()) } else { None };
-            (hit_or_miss, vic)
-        }
-     }
     
     pub fn take_turn(&mut self, pos: (u8, u8)) -> (FireState, Option<&Players>)
     {
@@ -306,7 +280,7 @@ impl BattleShipGame
         let mut local_players = 2;
 
         // This line clears the terminal
-        //print!("{esc}c", esc = 27 as char);
+        print!("{esc}c", esc = 27 as char);
         
         if self.is_p2_ai == true
         {
@@ -530,12 +504,13 @@ impl BattleShipGame
 
         while self.is_player_one_turn == false
         {
-            for x in 1..=10{
-                for y in 1..=9{
-                    if self.player_one.is_ship(x-1,y-1) == true && self.player_one.board_matrix[x-1][y-1] == WaterSquare::Empty
+            for row in 1..=9{
+                for col in 1..=10{
+                    if self.player_one.is_ship(col-1,row-1) == true && self.player_one.board_matrix[row-1][col-1] == WaterSquare::Empty
                     {
-                        println!("AI fired at: ({}, {})", x, y);
-                        self.take_turn((x as u8 - 1,y as u8 - 1));
+                        println!("AI fired at: ({}, {})", row, col);
+                        self.take_turn((col as u8 - 1,row as u8 - 1));
+                        return
                     }
                 }
             }
@@ -548,19 +523,19 @@ impl BattleShipGame
     	let mut correct_input = false;
         if self.is_player_one_turn
         {
-           
-           self.player_one.print_scoreboard();
-           println!("Your ships:");
-           self.player_one.print_board(true);
-           println!("AI board (our pespective):");
-           self.player_two.print_board(false);
-           println!("AI board (debug)");
-           self.player_two.print_board(true);
-           if !self.player_one.printed_s_check()
-           {
-              println!("AI wins!");
-              //break;
-           }	
+            print!("{esc}c", esc = 27 as char);
+            self.player_one.print_scoreboard();
+            println!("Your ships:");
+            self.player_one.print_board(true);
+            println!("AI board (our pespective):");
+            self.player_two.print_board(false);
+            println!("AI board (debug)");
+            self.player_two.print_board(true);
+            if !self.player_one.printed_s_check()
+            {
+                println!("AI wins!");
+                //break;
+            }	
             
         }
         else
@@ -616,11 +591,12 @@ impl BattleShipGame
             {
         	    self.ai_easy_turn();
             }
+            println!("diff: {}", self.ai_difficulty);
             if self.ai_difficulty == 3
             {
                 self.ai_hard_turn();
             }
-            print!("{esc}c", esc = 27 as char);
+            //print!("{esc}c", esc = 27 as char);
         }
         
       }
@@ -642,7 +618,7 @@ impl BattleShipGame
             else
             {
                 let mut correct_input = false;
-                // print!("{esc}c", esc = 27 as char);
+                //print!("{esc}c", esc = 27 as char);
                 if self.is_player_one_turn
                 {
                     println!("Please swap to player one");
