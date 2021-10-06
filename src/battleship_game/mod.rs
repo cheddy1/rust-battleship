@@ -59,7 +59,6 @@ impl BattleShipGame
         else
         {
             // Same idea here
-            println!("Hello");
             let hit_or_miss = self.player_one.fire(pos);
             self.player_two.count_hits_misses(pos);
             self.is_player_one_turn = !self.is_player_one_turn;
@@ -506,20 +505,26 @@ impl BattleShipGame
     }
     
      
-    pub fn ai_difficulty_turn(&mut self)
+    pub fn ai_easy_turn(&mut self)
     {
-    	 let col = rand::thread_rng().gen_range(1..11);
+    	let col = rand::thread_rng().gen_range(1..11);
         let row = rand::thread_rng().gen_range(1..10);
-    	self.take_ai_turn((col as u8 - 1, row as u8 - 1));
+        println!("AI fired at: ({}, {})", col, row);
+    	self.take_turn((col as u8 - 1, row as u8 - 1));
     }
     pub fn ai_play_game(&mut self)
     {
     	let mut correct_input = false;
         if self.is_player_one_turn
         {
-           println!("Your ships:");
+           
            self.player_one.print_scoreboard();
+           println!("Your ships:");
            self.player_one.print_board(true);
+           println!("AI board (our pespective):");
+           self.player_two.print_board(false);
+           println!("AI board (debug)");
+           self.player_two.print_board(true);
            if !self.player_one.printed_s_check()
            {
               println!("AI wins!");
@@ -535,12 +540,6 @@ impl BattleShipGame
               //break;
            }
         }
- 	
-           if self.is_player_one_turn
-           {
-           	println!("AI's board so far:");
-               self.player_two.print_board(false);
-           }
       while !correct_input
       {
       	if self.is_player_one_turn
@@ -576,14 +575,17 @@ impl BattleShipGame
             else
             {
                 correct_input = true;
-                self.take_ai_turn((col as u8 - 1, row as u8 - 1));
+                self.take_turn((col as u8 - 1, row as u8 - 1));
             }
         }
         else
         {
-        	println!("Bye");
         	correct_input=true;
-        	self.ai_difficulty_turn();
+            if self.ai_difficulty == 1
+            {
+        	    self.ai_easy_turn();
+            }
+            print!("{esc}c", esc = 27 as char);
         }
         
       }
@@ -600,7 +602,7 @@ impl BattleShipGame
         {
             if self.is_p2_ai == true
             {
-		self.ai_play_game();
+		        self.ai_play_game();
             }
             else
             {
@@ -625,8 +627,8 @@ impl BattleShipGame
                     self.player_one.print_board(true);
                     if !self.player_one.printed_s_check()
                     {
-                    println!("player 2 wins!");
-                    break;
+                        println!("player 2 wins!");
+                        break;
                     }
                 }
                 else
