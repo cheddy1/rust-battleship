@@ -9,7 +9,7 @@ pub struct Player
 {
     /// A matrix of size [`BOARD_WIDTH`] x [`BOARD_HEIGHT`] to store which squares were hit and which
     /// ones weren't
-    board_matrix: [[ WaterSquare; BOARD_WIDTH ]; BOARD_HEIGHT ],
+    pub board_matrix: [[ WaterSquare; BOARD_WIDTH ]; BOARD_HEIGHT ],
 
     /// A vector of the ship objects the player has on their board
     ships_vec: Vec<Ship>,
