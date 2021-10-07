@@ -48,7 +48,7 @@ impl BattleShipGame
         {
             // First we fire on the other player's board
             let hit_or_miss = self.player_two.fire(pos);
-            self.player_one.count_hits_misses(pos);
+            self.player_one.count_hits_misses(self.player_two.ship_index_at(pos));
 
             // Invert the member variable dictating whose turn it is
             self.is_player_one_turn = !self.is_player_one_turn;
@@ -61,7 +61,7 @@ impl BattleShipGame
         {
             // Same idea here
             let hit_or_miss = self.player_one.fire(pos);
-            self.player_two.count_hits_misses(pos);
+            self.player_two.count_hits_misses(self.player_one.ship_index_at(pos));
             self.is_player_one_turn = !self.is_player_one_turn;
             let vic = if self.check_victory() { Some(self.player_two.get_sig()) } else { None };
         }

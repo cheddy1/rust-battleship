@@ -92,8 +92,8 @@ impl Player
 
     }
 
-    pub fn count_hits_misses(&mut self, pos: (u8, u8)){
-        return match self.ship_index_at(pos){
+    pub fn count_hits_misses(&mut self, ship_at_pos: Option<usize>){
+        return match ship_at_pos{
             Some(i) => {
                 self.number_of_hits += 1;
             }
