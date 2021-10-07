@@ -493,7 +493,7 @@ impl BattleShipGame
     {
     	let col = rand::thread_rng().gen_range(1..11);
         let row = rand::thread_rng().gen_range(1..10);
-        println!("AI fired at: ({}, {})", col, row);
+        //println!("AI fired at: ({}, {})", col, row);
     	self.take_turn((col as u8 - 1, row as u8 - 1));
     }
     
@@ -506,7 +506,7 @@ impl BattleShipGame
                 for col in 1..=10{
                     if self.player_one.is_ship(col-1,row-1) == true && self.player_one.board_matrix[row-1][col-1] == WaterSquare::Empty
                     {
-                        println!("AI fired at: ({}, {})", row, col);
+                        //println!("AI fired at: ({}, {})", row, col);
                         self.take_turn((col as u8 - 1,row as u8 - 1));
                         return
                     }
@@ -586,10 +586,34 @@ impl BattleShipGame
                 if self.ai_difficulty == 1
                 {
                     self.ai_easy_turn();
+   		     if self.player_two.all_ships_sunk()
+		     {
+			println!("Player 1 wins!");
+			self.game_over = true;
+			return;
+		     }	
+	    	     else if self.player_one.all_ships_sunk()
+		     {
+			println!("AI wins!");
+			self.game_over = true;
+			return;
+		    }
                 }
                 if self.ai_difficulty == 3
                 {
                     self.ai_hard_turn();
+                    if self.player_two.all_ships_sunk()
+		     {
+			println!("Player 1 wins!");
+			self.game_over = true;
+			return;
+		     }	
+	    	     else if self.player_one.all_ships_sunk()
+		     {
+			println!("AI wins!");
+			self.game_over = true;
+			return;
+		    }
                 }
             }
         
