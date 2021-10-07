@@ -65,7 +65,7 @@ impl Ship
         if self.is_sunk
         {
             // TODO: Remove this debug
-            println!("YOU SUNK ME WAAAAAA");
+            //println!("YOU SUNK ME WAAAAAA");
         }
     }
 
