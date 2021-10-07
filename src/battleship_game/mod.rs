@@ -521,7 +521,7 @@ impl BattleShipGame
     	let mut correct_input = false;
         if self.is_player_one_turn
         {
-            //print!("{esc}c", esc = 27 as char);
+            print!("{esc}c", esc = 27 as char);
             self.player_one.print_scoreboard();
             println!("Your ships:");
             self.player_one.print_board(true);
@@ -606,7 +606,6 @@ impl BattleShipGame
         {
             if self.is_p2_ai == true
             {
-                println!("here");
                 self.ai_play_game();
             }
             
