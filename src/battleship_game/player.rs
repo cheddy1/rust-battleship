@@ -21,7 +21,7 @@ pub struct Player
     /// This will be used to detect if an S is printed
     printed_s: bool,
 
-    number_of_hits: u8,
+    pub number_of_hits: u8,
 
     number_of_misses: u8,
 }
