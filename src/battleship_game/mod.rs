@@ -496,6 +496,20 @@ impl BattleShipGame
         //println!("AI fired at: ({}, {})", col, row);
     	self.take_turn((col as u8 - 1, row as u8 - 1));
     }
+
+    pub fn ai_medium_turn(&mut self)
+    {
+        
+
+        let col = rand::thread_rng().gen_range(1..11);
+        let row = rand::thread_rng().gen_range(1..10);
+        self.take_turn((col as u8 - 1, row as u8 - 1));
+        
+        if self.player_two.number_of_hits == 1
+        {
+            self.take_turn(((col+1) as u8 - 1, row as u8 - 1))
+        }
+    }
     
     pub fn ai_hard_turn(&mut self)
     {
@@ -586,34 +600,50 @@ impl BattleShipGame
                 if self.ai_difficulty == 1
                 {
                     self.ai_easy_turn();
-   		     if self.player_two.all_ships_sunk()
-		     {
-			println!("Player 1 wins!");
-			self.game_over = true;
-			return;
-		     }	
-	    	     else if self.player_one.all_ships_sunk()
-		     {
-			println!("AI wins!");
-			self.game_over = true;
-			return;
-		    }
+                    if self.player_two.all_ships_sunk()
+                    {
+                        println!("Player 1 wins!");
+                        self.game_over = true;
+                        return;
+                    }	
+                    else if self.player_one.all_ships_sunk()
+                    {
+                        println!("AI wins!");
+                        self.game_over = true;
+                        return;
+                    }
+                }
+                if self.ai_difficulty == 2
+                {
+                    self.ai_medium_turn();
+                    if self.player_two.all_ships_sunk()
+                    {
+                        println!("Player 1 wins!");
+                        self.game_over = true;
+                        return;
+                    }	
+                    else if self.player_one.all_ships_sunk()
+                    {
+                        println!("AI wins!");
+                        self.game_over = true;
+                        return;
+                    }
                 }
                 if self.ai_difficulty == 3
                 {
                     self.ai_hard_turn();
                     if self.player_two.all_ships_sunk()
-		     {
-			println!("Player 1 wins!");
-			self.game_over = true;
-			return;
-		     }	
-	    	     else if self.player_one.all_ships_sunk()
-		     {
-			println!("AI wins!");
-			self.game_over = true;
-			return;
-		    }
+                    {
+                        println!("Player 1 wins!");
+                        self.game_over = true;
+                        return;
+                    }	
+                    else if self.player_one.all_ships_sunk()
+                    {
+                        println!("AI wins!");
+                        self.game_over = true;
+                        return;
+                    }
                 }
             }
         
