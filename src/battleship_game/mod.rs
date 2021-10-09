@@ -524,6 +524,19 @@ impl BattleShipGame
     }
     
     pub fn ai_med_turn(&mut self){
+
+        if self.player_medium_ai.get_run_direction() == true {
+            if (self.player_medium_ai.get_current_hit().1 == 0) && self.player_medium_ai.get_direction("up") == true {
+                self.player_medium_ai.change_direction("on");
+            } else if self.player_medium_ai.get_current_hit().0 == 0 && self.player_medium_ai.get_direction("left") == true {
+                self.player_medium_ai.change_direction("on");
+            } else if self.player_medium_ai.get_current_hit().0 == 9 && self.player_medium_ai.get_direction("right") == true {
+                self.player_medium_ai.change_direction("on");
+            } else if self.player_medium_ai.get_current_hit().1 == 8 && self.player_medium_ai.get_direction("down") == true {
+                self.player_medium_ai.change_direction("on");
+            }
+        }
+
         if (self.player_medium_ai.get_main_hit() == (0,0)){
             loop {
                 let col = rand::thread_rng().gen_range(1..11);
@@ -542,7 +555,7 @@ impl BattleShipGame
                 if (self.player_medium_ai.get_run_direction() == true) {
                     self.player_medium_ai.change_direction("up");
                 }
-            } else if (self.player_medium_ai.get_direction("right") == true && (self.player_medium_ai.get_current_hit().0) + 1 < 11 && self.ai_med_turn_valid("right") == true){
+            } else if (self.player_medium_ai.get_direction("right") == true && (self.player_medium_ai.get_current_hit().0) + 1 < 10 && self.ai_med_turn_valid("right") == true){
                 self.player_medium_ai.change_direction("right");
                 let col = (self.player_medium_ai.get_current_hit().0) + 1;
                 let row = self.player_medium_ai.get_current_hit().1;
@@ -550,7 +563,7 @@ impl BattleShipGame
                 if (self.player_medium_ai.get_run_direction() == true) {
                     self.player_medium_ai.change_direction("right");
                 }
-            } else if (self.player_medium_ai.get_direction("down") == true && (self.player_medium_ai.get_current_hit().1) + 1 < 10 && self.ai_med_turn_valid("down") == true){
+            } else if (self.player_medium_ai.get_direction("down") == true && (self.player_medium_ai.get_current_hit().1) + 1 < 9 && self.ai_med_turn_valid("down") == true){
                 self.player_medium_ai.change_direction("down");
                 let col = self.player_medium_ai.get_current_hit().0;
                 let row = (self.player_medium_ai.get_current_hit().1) + 1;
