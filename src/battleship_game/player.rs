@@ -52,6 +52,7 @@ impl Player
             number_of_hits: 0,
 
             number_of_misses: 0,
+
        }
     }
 
