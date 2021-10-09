@@ -569,9 +569,14 @@ impl BattleShipGame
             } else {
                 self.player_medium_ai.assign_current_hit((0,0));
                 self.player_medium_ai.assign_main_hit((0,0));
-                let col = rand::thread_rng().gen_range(1..11);
-                let row = rand::thread_rng().gen_range(1..10);
-    	        self.take_turn((col as u8 - 1, row as u8 - 1));
+                loop {
+                    let col = rand::thread_rng().gen_range(1..11);
+                    let row = rand::thread_rng().gen_range(1..10);
+                    if self.player_one.is_attacked(row-1,col-1) == false {
+                        self.take_turn((col as u8 - 1, row as u8 - 1));
+                        break;
+                    }
+                } 
             }
         }
     }
