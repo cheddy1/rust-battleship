@@ -226,7 +226,6 @@ impl BattleShipGame
                         // Vertical
                         if hv == 1
                         {
-                           println!("Hello");
                             if row + ship > 9 && hv == 1
                             {
                                 valid_loc = false;
@@ -235,7 +234,7 @@ impl BattleShipGame
                             {
                                 for k in 0..= ship
                                 {
-                                    if self.player_two.ship_index_at((col as u8 - 1 + k as u8, row as u8 - 1)) == None
+                                    if self.player_two.ship_index_at((col as u8 - 1, row as u8 - 1 + k as u8)) == None
                                     {
                                         valid_loc = true;
                                         ship_conflict = false;
@@ -264,7 +263,7 @@ impl BattleShipGame
                             {
                                 for k in 0..= ship
                                 {
-                                    if self.player_two.ship_index_at((col as u8 - 1, row as u8 - 1 + k as u8)) == None
+                                    if self.player_two.ship_index_at((col as u8 - 1 + k as u8, row as u8 - 1)) == None
                                     {
                                         valid_loc = true;
                                         ship_conflict = false;
@@ -428,10 +427,9 @@ impl BattleShipGame
                     {
                         for k in 0..=i
                         {
-                        	println!("Hello");
                             if vertical
                             {
-                                if self.player_one.ship_index_at((col as u8 - 1 + k as u8, row as u8 - 1)) == None
+                                if self.player_one.ship_index_at((col as u8 - 1, row as u8 - 1 + k as u8)) == None
                                 {
                                     ship_conflict = false;
                                 }
@@ -445,7 +443,7 @@ impl BattleShipGame
                             }
                             else
                             {
-                                if self.player_one.ship_index_at((col as u8 - 1, row as u8 - 1 + k as u8)) == None
+                                if self.player_one.ship_index_at((col as u8 - 1 + k as u8, row as u8 - 1)) == None
                                 {
                                     ship_conflict = false;
                                 }
@@ -465,7 +463,7 @@ impl BattleShipGame
                         {
                             if vertical
                             {
-                                if self.player_two.ship_index_at((col as u8 - 1 + k as u8, row as u8 - 1)) == None
+                                if self.player_two.ship_index_at((col as u8 - 1 as u8, row as u8 - 1+ k as u8)) == None
                                 {
                                     ship_conflict = false;
                                 }
@@ -479,7 +477,7 @@ impl BattleShipGame
                             }
                             else
                             {
-                                if self.player_two.ship_index_at((col as u8 - 1, row as u8 - 1 + k as u8)) == None
+                                if self.player_two.ship_index_at((col as u8 - 1 + k as u8, row as u8 - 1 )) == None
                                 {
                                     ship_conflict = false;
                                 }
