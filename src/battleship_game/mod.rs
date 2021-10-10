@@ -264,7 +264,7 @@ impl BattleShipGame
                             {
                                 for k in 0..= ship
                                 {
-                                    if self.player_two.ship_index_at((row as u8 - 1, col as u8 - 1 + k as u8)) == None
+                                    if self.player_two.ship_index_at((col as u8 - 1, row as u8 - 1 + k as u8)) == None
                                     {
                                         valid_loc = true;
                                         ship_conflict = false;
