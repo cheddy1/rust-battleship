@@ -1,0 +1,9 @@
+	The Battleship game we got for out project two was designed using an object oriented design paradigm. The language the former group used is rust, which leads itself as 
+  object oriented. One main reason we believe the project was designed by object oriented programming is the number of objects that are used throughout. There is a player object, 
+  ship object, and others that all come together to create the program. The player object includes data like their board, a vector of their ships, and number of hits and misses.
+  The player object also includes methods like place ship, fire, and other useful function. By creating a player object we can update the status of any of these attributes 
+  by using the object we created. We can see this in the design for project 1 where there was an object created for player 1 and player 2. There is also a ship class includes
+  data like the ship’s position and weather its sunk and hit. Within the class there are ship methods that are used to get the size, update, and sink the ship. 
+  All of these objects and their methods are used to define unique aspects of the game and alter data assigned to a specific object. Functions can also be used across
+  different classes for example, functions from the ship class are used to check ship size and if a ship has sunk while the player is playing the game. 
+  The game playing operations are defined in a different class, but can still use functions form the ship class which is key feature of object oriented design.
