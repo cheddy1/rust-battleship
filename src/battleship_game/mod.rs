@@ -5,10 +5,12 @@ use std::io;
 mod data_structures;
 mod player;
 mod ship;
+mod medium;
 
 // Import the battleship_game module from the root of the crate
 use crate::battleship_game::player::*;
 use crate::battleship_game::data_structures::*;
+use crate::battleship_game::medium::*;
 use rand::Rng;
 
 // // Size constants
@@ -24,6 +26,8 @@ pub struct BattleShipGame
 
     /// The object that holds the second player
     player_two: Player,
+
+    player_medium_ai: MediumAI,
 
     /// This variable keeps track of whose turn it is
     is_player_one_turn: bool,
@@ -64,6 +68,22 @@ impl BattleShipGame
             self.player_two.count_hits_misses(self.player_one.ship_index_at(pos));
             self.is_player_one_turn = !self.is_player_one_turn;
             let vic = if self.check_victory() { Some(self.player_two.get_sig()) } else { None };
+            if (self.ai_difficulty == 2 && matches!(hit_or_miss , FireState::Hit)){
+                if (self.player_medium_ai.get_main_hit() == (0,0)){
+                    self.player_medium_ai.assign_main_hit(pos);
+                    self.player_medium_ai.assign_current_hit(pos);
+                    self.player_medium_ai.change_direction("on");
+                } else {
+                    self.player_medium_ai.assign_current_hit(pos);
+                    self.player_medium_ai.change_direction("off");
+                    self.player_medium_ai.set_run_direction(true);
+                }
+            } else {
+                let main_hit = self.player_medium_ai.get_main_hit();
+                self.player_medium_ai.assign_current_hit(main_hit);
+                self.player_medium_ai.set_run_direction(false);
+                self.player_medium_ai.change_direction("on");
+            }
         }
     }    
 
@@ -139,6 +159,7 @@ impl BattleShipGame
         {
             player_one: Player::new_player(ship_count, Players::PlayerOne),
             player_two: Player::new_player(ship_count, Players::PlayerTwo),
+            player_medium_ai: MediumAI::create_ai(),
             is_player_one_turn: true,
             ship_count: ship_count,
             is_p2_ai: ai_bool,
@@ -213,7 +234,7 @@ impl BattleShipGame
                             {
                                 for k in 0..= ship
                                 {
-                                    if self.player_two.ship_index_at((row as u8 - 1 + k as u8, col as u8 - 1)) == None
+                                    if self.player_two.ship_index_at((col as u8 - 1, row as u8 - 1 + k as u8)) == None
                                     {
                                         valid_loc = true;
                                         ship_conflict = false;
@@ -242,7 +263,7 @@ impl BattleShipGame
                             {
                                 for k in 0..= ship
                                 {
-                                    if self.player_two.ship_index_at((row as u8 - 1, col as u8 - 1 + k as u8)) == None
+                                    if self.player_two.ship_index_at((col as u8 - 1 + k as u8, row as u8 - 1)) == None
                                     {
                                         valid_loc = true;
                                         ship_conflict = false;
@@ -408,7 +429,7 @@ impl BattleShipGame
                         {
                             if vertical
                             {
-                                if self.player_one.ship_index_at((row as u8 - 1 + k as u8, col as u8 - 1)) == None
+                                if self.player_one.ship_index_at((col as u8 - 1, row as u8 - 1 + k as u8)) == None
                                 {
                                     ship_conflict = false;
                                 }
@@ -422,7 +443,7 @@ impl BattleShipGame
                             }
                             else
                             {
-                                if self.player_one.ship_index_at((row as u8 - 1, col as u8 - 1 + k as u8)) == None
+                                if self.player_one.ship_index_at((col as u8 - 1 + k as u8, row as u8 - 1)) == None
                                 {
                                     ship_conflict = false;
                                 }
@@ -442,7 +463,7 @@ impl BattleShipGame
                         {
                             if vertical
                             {
-                                if self.player_two.ship_index_at((row as u8 - 1 + k as u8, col as u8 - 1)) == None
+                                if self.player_two.ship_index_at((col as u8 - 1 as u8, row as u8 - 1+ k as u8)) == None
                                 {
                                     ship_conflict = false;
                                 }
@@ -456,7 +477,7 @@ impl BattleShipGame
                             }
                             else
                             {
-                                if self.player_two.ship_index_at((row as u8 - 1, col as u8 - 1 + k as u8)) == None
+                                if self.player_two.ship_index_at((col as u8 - 1 + k as u8, row as u8 - 1 )) == None
                                 {
                                     ship_conflict = false;
                                 }
@@ -491,26 +512,110 @@ impl BattleShipGame
     }
     pub fn ai_easy_turn(&mut self)
     {
-    	let col = rand::thread_rng().gen_range(1..11);
-        let row = rand::thread_rng().gen_range(1..10);
+        loop {
+            let col = rand::thread_rng().gen_range(1..11);
+            let row = rand::thread_rng().gen_range(1..10);
+            if self.player_one.is_attacked(row-1,col-1) == false {
+                self.take_turn((col as u8 - 1, row as u8 - 1));
+                break;
+            }
+        } 
         //println!("AI fired at: ({}, {})", col, row);
-    	self.take_turn((col as u8 - 1, row as u8 - 1));
-    }
-
-    pub fn ai_medium_turn(&mut self)
-    {
-        
-
-        let col = rand::thread_rng().gen_range(1..11);
-        let row = rand::thread_rng().gen_range(1..10);
-        self.take_turn((col as u8 - 1, row as u8 - 1));
-        
-        if self.player_two.number_of_hits == 1
-        {
-            self.take_turn(((col+1) as u8 - 1, row as u8 - 1))
-        }
     }
     
+    pub fn ai_med_turn(&mut self){
+
+        if self.player_medium_ai.get_run_direction() == true {
+            if (self.player_medium_ai.get_current_hit().1 == 0) && self.player_medium_ai.get_direction("up") == true {
+                self.player_medium_ai.change_direction("on");
+            } else if self.player_medium_ai.get_current_hit().0 == 0 && self.player_medium_ai.get_direction("left") == true {
+                self.player_medium_ai.change_direction("on");
+            } else if self.player_medium_ai.get_current_hit().0 == 9 && self.player_medium_ai.get_direction("right") == true {
+                self.player_medium_ai.change_direction("on");
+            } else if self.player_medium_ai.get_current_hit().1 == 8 && self.player_medium_ai.get_direction("down") == true {
+                self.player_medium_ai.change_direction("on");
+            }
+        }
+
+        if (self.player_medium_ai.get_main_hit() == (0,0)){
+            loop {
+                let col = rand::thread_rng().gen_range(1..11);
+                let row = rand::thread_rng().gen_range(1..10);
+                if self.player_one.is_attacked(row-1,col-1) == false {
+                    self.take_turn((col as u8 - 1, row as u8 - 1));
+                    break;
+                }
+            } 
+        } else {
+            if (self.player_medium_ai.get_direction("up") == true && (self.player_medium_ai.get_current_hit().1) != 0 && self.ai_med_turn_valid("up") == true) {
+                self.player_medium_ai.change_direction("up");  
+                let col = self.player_medium_ai.get_current_hit().0;
+                let row = (self.player_medium_ai.get_current_hit().1) - 1;
+                self.take_turn((col as u8, row as u8));
+                if (self.player_medium_ai.get_run_direction() == true) {
+                    self.player_medium_ai.change_direction("up");
+                }
+            } else if (self.player_medium_ai.get_direction("right") == true && (self.player_medium_ai.get_current_hit().0) + 1 < 10 && self.ai_med_turn_valid("right") == true){
+                self.player_medium_ai.change_direction("right");
+                let col = (self.player_medium_ai.get_current_hit().0) + 1;
+                let row = self.player_medium_ai.get_current_hit().1;
+                self.take_turn((col as u8, row as u8 ));
+                if (self.player_medium_ai.get_run_direction() == true) {
+                    self.player_medium_ai.change_direction("right");
+                }
+            } else if (self.player_medium_ai.get_direction("down") == true && (self.player_medium_ai.get_current_hit().1) + 1 < 9 && self.ai_med_turn_valid("down") == true){
+                self.player_medium_ai.change_direction("down");
+                let col = self.player_medium_ai.get_current_hit().0;
+                let row = (self.player_medium_ai.get_current_hit().1) + 1;
+                self.take_turn((col as u8 , row as u8 ));
+                if (self.player_medium_ai.get_run_direction() == true) {
+                    self.player_medium_ai.change_direction("down");
+                }
+            } else if (self.player_medium_ai.get_direction("left") == true && (self.player_medium_ai.get_current_hit().0) != 0 && self.ai_med_turn_valid("left") == true){
+                self.player_medium_ai.change_direction("left");
+                let col = (self.player_medium_ai.get_current_hit().0) - 1;
+                let row = self.player_medium_ai.get_current_hit().1;
+                self.take_turn((col as u8 , row as u8 ));
+                if (self.player_medium_ai.get_run_direction() == true) {
+                    self.player_medium_ai.change_direction("left");
+                }
+            } else {
+                self.player_medium_ai.assign_current_hit((0,0));
+                self.player_medium_ai.assign_main_hit((0,0));
+                loop {
+                    let col = rand::thread_rng().gen_range(1..11);
+                    let row = rand::thread_rng().gen_range(1..10);
+                    if self.player_one.is_attacked(row-1,col-1) == false {
+                        self.take_turn((col as u8 - 1, row as u8 - 1));
+                        break;
+                    }
+                } 
+            }
+        }
+    }
+
+    pub fn ai_med_turn_valid(&mut self, direction: &str) -> bool {
+        if direction == "up" {
+            let col = self.player_medium_ai.get_current_hit().0;
+            let row = (self.player_medium_ai.get_current_hit().1) - 1;
+            !self.player_one.is_attacked(row.into(), col.into())
+        } else if direction == "down"{
+            let col = self.player_medium_ai.get_current_hit().0;
+            let row = (self.player_medium_ai.get_current_hit().1) + 1;
+            !self.player_one.is_attacked(row.into(), col.into())
+        } else if direction == "left" {
+            let col = (self.player_medium_ai.get_current_hit().0) - 1;
+            let row = self.player_medium_ai.get_current_hit().1;
+            !self.player_one.is_attacked(row.into(), col.into())
+        } else if direction == "right" {
+            let col = (self.player_medium_ai.get_current_hit().0) + 1;
+            let row = self.player_medium_ai.get_current_hit().1;
+            !self.player_one.is_attacked(row.into(), col.into())
+        } else {
+            false
+        }
+    }
+
     pub fn ai_hard_turn(&mut self)
     {
 
@@ -537,12 +642,15 @@ impl BattleShipGame
         {
             print!("{esc}c", esc = 27 as char);
             self.player_one.print_scoreboard();
+            //println!("{:?} is the main hit, {:?} is the current hit", self.player_medium_ai.get_main_hit(), self.player_medium_ai.get_current_hit() );
+            //println!("lookLeft: {}, lookRight: {}, lookUp: {}, lookDown: {}", self.player_medium_ai.get_direction("left"), self.player_medium_ai.get_direction("right"), self.player_medium_ai.get_direction("up"), self.player_medium_ai.get_direction("down"));
+           // println!("Directions: {}", self.player_medium_ai.get_direction("all"));
             println!("Your ships:");
             self.player_one.print_board(true);
             println!("AI board (our pespective):");
             self.player_two.print_board(false);
-            println!("AI board (debug)");
-            self.player_two.print_board(true);
+            //println!("AI board (debug)");
+            //self.player_two.print_board(true);
             if self.player_one.all_ships_sunk()
             {
                 println!("AI wins!");
@@ -600,53 +708,27 @@ impl BattleShipGame
                 if self.ai_difficulty == 1
                 {
                     self.ai_easy_turn();
-                    if self.player_two.all_ships_sunk()
-                    {
-                        println!("Player 1 wins!");
-                        self.game_over = true;
-                        return;
-                    }	
-                    else if self.player_one.all_ships_sunk()
-                    {
-                        println!("AI wins!");
-                        self.game_over = true;
-                        return;
-                    }
-                }
-                if self.ai_difficulty == 2
+                } else if self.ai_difficulty == 2
                 {
-                    self.ai_medium_turn();
-                    if self.player_two.all_ships_sunk()
-                    {
-                        println!("Player 1 wins!");
-                        self.game_over = true;
-                        return;
-                    }	
-                    else if self.player_one.all_ships_sunk()
-                    {
-                        println!("AI wins!");
-                        self.game_over = true;
-                        return;
-                    }
-                }
-                if self.ai_difficulty == 3
+                    self.ai_med_turn();
+                } else if self.ai_difficulty == 3
                 {
                     self.ai_hard_turn();
-                    if self.player_two.all_ships_sunk()
-                    {
-                        println!("Player 1 wins!");
-                        self.game_over = true;
-                        return;
-                    }	
-                    else if self.player_one.all_ships_sunk()
-                    {
-                        println!("AI wins!");
-                        self.game_over = true;
-                        return;
-                    }
                 }
+
+
+                if self.player_two.all_ships_sunk()
+		        {
+			        println!("Player 1 wins!");
+			        self.game_over = true;
+			        return;
+		        } else if self.player_one.all_ships_sunk()
+		        {
+			        println!("AI wins!");
+			        self.game_over = true;
+			        return;
+		        }
             }
-        
       }
     }
                            
