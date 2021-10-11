@@ -642,15 +642,15 @@ impl BattleShipGame
         {
             print!("{esc}c", esc = 27 as char);
             self.player_one.print_scoreboard();
-            println!("{:?} is the main hit, {:?} is the current hit", self.player_medium_ai.get_main_hit(), self.player_medium_ai.get_current_hit() );
-            println!("lookLeft: {}, lookRight: {}, lookUp: {}, lookDown: {}", self.player_medium_ai.get_direction("left"), self.player_medium_ai.get_direction("right"), self.player_medium_ai.get_direction("up"), self.player_medium_ai.get_direction("down"));
-            println!("Directions: {}", self.player_medium_ai.get_direction("all"));
+            //println!("{:?} is the main hit, {:?} is the current hit", self.player_medium_ai.get_main_hit(), self.player_medium_ai.get_current_hit() );
+            //println!("lookLeft: {}, lookRight: {}, lookUp: {}, lookDown: {}", self.player_medium_ai.get_direction("left"), self.player_medium_ai.get_direction("right"), self.player_medium_ai.get_direction("up"), self.player_medium_ai.get_direction("down"));
+           // println!("Directions: {}", self.player_medium_ai.get_direction("all"));
             println!("Your ships:");
             self.player_one.print_board(true);
             println!("AI board (our pespective):");
             self.player_two.print_board(false);
-            println!("AI board (debug)");
-            self.player_two.print_board(true);
+            //println!("AI board (debug)");
+            //self.player_two.print_board(true);
             if self.player_one.all_ships_sunk()
             {
                 println!("AI wins!");
